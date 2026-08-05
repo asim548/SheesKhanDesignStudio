@@ -167,25 +167,17 @@ export default function Footer() {
           <p className="font-sans text-sm tracking-wide text-espresso/45">
             © {new Date().getFullYear()} {SITE.studio}. All rights reserved.
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2">
-            <Link
-              href="/studio-admin"
-              className="font-sans text-sm tracking-wide text-espresso/40 underline-offset-4 transition-colors duration-luxury hover:text-espresso/70 hover:underline"
+          <p className="font-sans text-sm tracking-wide text-espresso/45">
+            Powered by{" "}
+            <a
+              href="https://asimshehzad.vercel.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-espresso/70 underline-offset-4 transition-colors duration-luxury hover:text-espresso hover:underline"
             >
-              Admin
-            </Link>
-            <p className="font-sans text-sm tracking-wide text-espresso/45">
-              Powered by{" "}
-              <a
-                href="https://asimshehzad.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-espresso/70 underline-offset-4 transition-colors duration-luxury hover:text-espresso hover:underline"
-              >
-                Asim Shehzad
-              </a>
-            </p>
-          </div>
+              Asim Shehzad
+            </a>
+          </p>
         </div>
       </div>
     </footer>

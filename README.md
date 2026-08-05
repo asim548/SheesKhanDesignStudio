@@ -2,9 +2,11 @@
 
 Official website for **Shees Khan Design Studio** — luxury bridal couture, made-to-order bespoke, and ready-to-wear.
 
-**Live stack:** Next.js 14 (App Router) · TypeScript · Tailwind CSS · Framer Motion · MongoDB · NextAuth · Cloudinary · Resend · Zustand
+**Live site:** [https://shees-khan-design-studio.vercel.app](https://shees-khan-design-studio.vercel.app)
 
-Repository: [asim548/SheesKhanDesignStudio](https://github.com/asim548/SheesKhanDesignStudio)
+**Stack:** Next.js 14 (App Router) · TypeScript · Tailwind CSS · Framer Motion · MongoDB · NextAuth · Cloudinary · Resend · Zustand
+
+**Repository:** [asim548/SheesKhanDesignStudio](https://github.com/asim548/SheesKhanDesignStudio)
 
 ---
 
@@ -12,20 +14,12 @@ Repository: [asim548/SheesKhanDesignStudio](https://github.com/asim548/SheesKhan
 
 ### Public site
 - Brand homepage with hero video, featured collections & ready-to-wear
-- **Bespoke** portfolio (`/collections`) — consultation-led, no cart pricing
+- **Bespoke** portfolio (`/collections`) — consultation-led
 - **Ready-to-Wear shop** (`/shop`) — sizes, cart, checkout (payment via WhatsApp)
 - Custom consultation multi-step form
-- Wishlist, search, account/client-care pages
+- Wishlist, search, and client-care pages
 - Mobile bottom navigation + WhatsApp floating action
 - Contact, about, craftsmanship, testimonials, measurement guide
-- Order confirmation with downloadable PDF slip (admin)
-
-### Studio Admin (`/studio-admin`)
-- Secure NextAuth login
-- Bespoke design CRUD + Cloudinary uploads
-- RTW product CRUD
-- Consultation requests & shop orders (print / CSV / PDF)
-- Testimonials management
 
 ---
 
@@ -38,10 +32,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-| | URL |
-|---|---|
-| Site | http://localhost:3000 |
-| Admin | http://localhost:3000/studio-admin |
+Open [http://localhost:3000](http://localhost:3000) for local development.
 
 ---
 
@@ -52,28 +43,26 @@ Copy `.env.example` → `.env.local`:
 | Variable | Purpose |
 |---|---|
 | `MONGODB_URI` | MongoDB Atlas connection string |
-| `NEXTAUTH_URL` | Site URL (`http://localhost:3000` locally) |
+| `NEXTAUTH_URL` | Site URL (`https://shees-khan-design-studio.vercel.app` in production) |
 | `NEXTAUTH_SECRET` | Random secret (`openssl rand -base64 32`) |
-| `NEXT_PUBLIC_SITE_URL` | Public site URL (SEO / emails) |
-| `ADMIN_EMAIL` | Studio admin login email |
-| `ADMIN_PASSWORD` | Admin password (bootstraps on first login) |
+| `NEXT_PUBLIC_SITE_URL` | Public site URL (`https://shees-khan-design-studio.vercel.app`) |
+| `ADMIN_EMAIL` | Studio login email |
+| `ADMIN_PASSWORD` | Studio login password |
 | `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name |
 | `CLOUDINARY_API_KEY` | Cloudinary API key |
 | `CLOUDINARY_API_SECRET` | Cloudinary API secret |
 | `RESEND_API_KEY` | Resend API key for order/contact emails |
-| `NOTIFICATION_EMAIL` | Owner inbox for alerts (Resend signup email in test mode) |
+| `NOTIFICATION_EMAIL` | Owner inbox for alerts |
 | `RESEND_FROM` | Optional verified-domain sender |
 | `WHATSAPP_TOKEN` | Optional Meta Cloud API token |
 | `WHATSAPP_PHONE_NUMBER_ID` | Optional Meta phone number ID |
 | `WHATSAPP_OWNER_NUMBER` | Owner WhatsApp (digits, e.g. `923185088200`) |
 
-**Without MongoDB / Cloudinary / Resend:** the public site still runs with sample catalog data; forms acknowledge in demo mode where applicable.
-
 > Never commit `.env.local`. Only `.env.example` is tracked.
 
 ---
 
-## Main routes
+## Main public routes
 
 | Route | Description |
 |---|---|
@@ -82,9 +71,8 @@ Copy `.env.example` → `.env.local`:
 | `/shop` | Ready-to-wear catalog |
 | `/cart` · `/checkout` · `/order-confirmation` | RTW commerce flow |
 | `/custom-order` | Bespoke consultation |
-| `/wishlist` · `/search` · `/account` | Client tools (mobile-friendly) |
+| `/wishlist` · `/search` · `/account` | Client tools |
 | `/about` · `/craftsmanship` · `/testimonials` · `/contact` | Brand & contact |
-| `/studio-admin` | Admin dashboard (auth required) |
 
 ---
 
@@ -102,15 +90,18 @@ npm run seed     # Seed sample data (requires env)
 
 ## Deploy (Vercel)
 
+Live deployment: [https://shees-khan-design-studio.vercel.app](https://shees-khan-design-studio.vercel.app)
+
 1. Import [asim548/SheesKhanDesignStudio](https://github.com/asim548/SheesKhanDesignStudio) in [Vercel](https://vercel.com)
-2. Add all environment variables from `.env.example`
-3. Set `NEXTAUTH_URL` and `NEXT_PUBLIC_SITE_URL` to the production domain
+2. Add environment variables from `.env.example`
+3. Set `NEXTAUTH_URL` and `NEXT_PUBLIC_SITE_URL` to  
+   `https://shees-khan-design-studio.vercel.app`
 4. Deploy
 
 ### Supporting services
 - **MongoDB Atlas** — free M0 cluster; allow `0.0.0.0/0` for Vercel
-- **Cloudinary** — image uploads for admin
-- **Resend** — order/contact notifications (verify a domain for production inboxes)
+- **Cloudinary** — image uploads
+- **Resend** — order/contact notifications
 
 ---
 

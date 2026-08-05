@@ -48,10 +48,10 @@ export default function AccountPage() {
           </div>
 
           <Link
-            href="/studio-admin"
+            href="/wishlist"
             className="mt-6 inline-flex border border-espresso/10 px-6 py-4 font-sans text-[11px] uppercase tracking-[0.22em] text-espresso/55 transition-colors duration-500 hover:border-espresso/25 hover:text-espresso"
           >
-            Studio Admin →
+            View Wishlist →
           </Link>
 
           <p className="mt-10 font-sans text-sm text-espresso/45">
