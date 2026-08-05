@@ -1,17 +1,19 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Logo from "@/components/ui/Logo";
 import CartIcon from "@/components/shop/CartIcon";
+import WishlistIcon from "@/components/shop/WishlistIcon";
 import { NAV_LINKS, SITE } from "@/lib/constants";
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -22,19 +24,36 @@ export default function Header() {
 
   useEffect(() => {
     setOpen(false);
+    document.body.style.overflow = "";
   }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    document.body.classList.toggle("mobile-menu-open", open);
     return () => {
       document.body.style.overflow = "";
+      document.body.classList.remove("mobile-menu-open");
     };
   }, [open]);
+
+  const closeMenu = useCallback(() => {
+    setOpen(false);
+    document.body.style.overflow = "";
+  }, []);
+
+  const go = useCallback(
+    (href: string) => {
+      closeMenu();
+      if (href === pathname) return;
+      router.push(href);
+    },
+    [closeMenu, pathname, router]
+  );
 
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-[60] transition-[background,border-color,backdrop-filter,padding] duration-700 ease-luxury ${
+        className={`fixed inset-x-0 top-0 z-[90] transition-[background,border-color,backdrop-filter,padding] duration-700 ease-luxury ${
           open
             ? "border-b border-espresso/8 bg-ivory"
             : scrolled
@@ -43,58 +62,51 @@ export default function Header() {
         }`}
       >
         {/* Compact mobile top bar */}
-        <div className="grid h-[68px] grid-cols-[1fr_auto_1fr] items-center border-b border-espresso/[0.06] px-4 lg:hidden">
+        <div className="grid h-[68px] grid-cols-[1fr_auto_1fr] items-center border-b border-espresso/[0.06] px-3 lg:hidden">
           <button
             type="button"
-            className="relative z-[70] flex h-11 w-11 flex-col items-center justify-center gap-[5px] justify-self-start"
-            onClick={() => setOpen(!open)}
+            className={`relative z-[95] inline-flex h-11 items-center gap-2 justify-self-start rounded-full border px-3.5 transition-colors duration-300 ${
+              open
+                ? "border-espresso/25 bg-ivory text-espresso"
+                : "border-espresso/20 bg-blush/80 text-espresso shadow-[0_4px_14px_rgba(61,43,34,0.08)]"
+            }`}
+            onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
           >
-            <span
-              className={`block h-px w-6 bg-espresso transition-all duration-500 ease-luxury ${
-                open ? "translate-y-[6px] rotate-45" : ""
-              }`}
-            />
-            <span
-              className={`block h-px w-6 bg-espresso transition-all duration-500 ease-luxury ${
-                open ? "scale-x-0 opacity-0" : ""
-              }`}
-            />
-            <span
-              className={`block h-px w-6 bg-espresso transition-all duration-500 ease-luxury ${
-                open ? "-translate-y-[6px] -rotate-45" : ""
-              }`}
-            />
+            <span className="relative flex h-3.5 w-4 flex-col justify-between" aria-hidden>
+              <span
+                className={`block h-[1.5px] w-full origin-center bg-espresso transition-all duration-300 ${
+                  open ? "translate-y-[6px] rotate-45" : ""
+                }`}
+              />
+              <span
+                className={`block h-[1.5px] w-full bg-espresso transition-all duration-300 ${
+                  open ? "scale-x-0 opacity-0" : ""
+                }`}
+              />
+              <span
+                className={`block h-[1.5px] w-full origin-center bg-espresso transition-all duration-300 ${
+                  open ? "-translate-y-[6px] -rotate-45" : ""
+                }`}
+              />
+            </span>
+            <span className="font-sans text-[10px] font-medium uppercase tracking-[0.18em]">
+              {open ? "Close" : "Menu"}
+            </span>
           </button>
 
           <Link
             href="/"
             aria-label={`${SITE.studio} — Home`}
             className="flex h-[62px] items-center justify-center overflow-hidden [&_img]:w-[84px]"
+            onClick={closeMenu}
           >
             <Logo size="sm" animated={false} href={false} />
           </Link>
 
           <div className="flex items-center justify-self-end">
-            <Link
-              href="/search"
-              aria-label="Search"
-              className="flex h-10 w-10 items-center justify-center text-espresso"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.4"
-                aria-hidden
-              >
-                <circle cx="11" cy="11" r="7" />
-                <path d="m20 20-4-4" />
-              </svg>
-            </Link>
+            <WishlistIcon />
             <CartIcon />
           </div>
         </div>
@@ -104,7 +116,6 @@ export default function Header() {
             scrolled ? "py-2.5 md:py-3" : "py-4 md:py-5"
           }`}
         >
-          {/* Brand */}
           <Link
             href="/"
             className="group flex items-center gap-3 justify-self-start"
@@ -121,11 +132,7 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* Center nav — desktop */}
-          <nav
-            className="hidden items-center gap-1 lg:flex"
-            aria-label="Main"
-          >
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
             {NAV_LINKS.map((link) => {
               const active =
                 link.href === "/"
@@ -153,11 +160,10 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Right CTA + mobile toggle */}
-          <div className="flex items-center justify-self-end gap-3">
+          <div className="flex items-center justify-self-end gap-1">
             <Link
               href="/custom-order"
-              className="hidden items-center gap-2 border-b border-espresso/30 pb-0.5 font-sans text-[11px] uppercase tracking-[0.22em] text-espresso transition-all duration-500 hover:border-espresso lg:inline-flex"
+              className="mr-3 hidden items-center gap-2 border-b border-espresso/30 pb-0.5 font-sans text-[11px] uppercase tracking-[0.22em] text-espresso transition-all duration-500 hover:border-espresso lg:inline-flex"
             >
               Enquire
               <span aria-hidden className="text-espresso/40">
@@ -165,8 +171,8 @@ export default function Header() {
               </span>
             </Link>
 
+            <WishlistIcon />
             <CartIcon />
-
           </div>
         </div>
       </header>
@@ -178,8 +184,8 @@ export default function Header() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-[55] flex flex-col bg-ivory lg:hidden"
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed inset-0 z-[80] flex flex-col bg-ivory lg:hidden"
             role="dialog"
             aria-modal="true"
             aria-label="Mobile navigation"
@@ -188,14 +194,14 @@ export default function Header() {
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(232,213,208,0.45),_transparent_55%)]"
               aria-hidden
             />
-            <div className="h-[72px] shrink-0 md:h-[84px]" aria-hidden />
+            <div className="h-[68px] shrink-0" aria-hidden />
 
-            <nav className="relative flex flex-1 flex-col overflow-y-auto px-8 pb-12 pt-6">
-              <p className="mb-10 text-center font-sans text-[10px] uppercase tracking-[0.32em] text-espresso/40">
+            <nav className="relative flex flex-1 flex-col overflow-y-auto px-8 pb-28 pt-4">
+              <p className="mb-6 text-center font-sans text-[10px] uppercase tracking-[0.32em] text-espresso/40">
                 Navigate
               </p>
 
-              <div className="flex flex-1 flex-col items-center justify-center gap-1">
+              <div className="flex flex-col items-center gap-0">
                 {NAV_LINKS.map((link, i) => {
                   const active =
                     link.href === "/"
@@ -203,53 +209,54 @@ export default function Header() {
                       : pathname === link.href ||
                         pathname.startsWith(link.href + "/");
                   return (
-                    <motion.div
+                    <button
                       key={link.href}
-                      initial={{ opacity: 0, y: 18 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{
-                        delay: 0.06 * i,
-                        duration: 0.55,
-                        ease: [0.22, 1, 0.36, 1],
-                      }}
-                      className="w-full max-w-xs"
+                      type="button"
+                      onClick={() => go(link.href)}
+                      className={`flex w-full max-w-xs items-baseline justify-between border-b border-espresso/10 py-4 text-left transition-colors duration-300 active:bg-blush/30 ${
+                        active ? "text-espresso" : "text-espresso/55"
+                      }`}
                     >
-                      <Link
-                        href={link.href}
-                        onClick={() => setOpen(false)}
-                        className={`flex items-baseline justify-between border-b border-espresso/10 py-4 transition-colors duration-500 ${
-                          active ? "text-espresso" : "text-espresso/55 hover:text-espresso"
-                        }`}
-                      >
-                        <span className="font-serif text-3xl font-light tracking-wide">
-                          {link.label}
-                        </span>
-                        <span className="font-sans text-[10px] tracking-[0.2em] text-espresso/30">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                      </Link>
-                    </motion.div>
+                      <span className="font-serif text-3xl font-light tracking-wide">
+                        {link.label}
+                      </span>
+                      <span className="font-sans text-[10px] tracking-[0.2em] text-espresso/30">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                    </button>
                   );
                 })}
               </div>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.45, duration: 0.6 }}
-                className="mt-12 space-y-5 text-center"
-              >
-                <Link
-                  href="/custom-order"
-                  onClick={() => setOpen(false)}
-                  className="inline-flex border border-espresso/25 px-10 py-3.5 font-sans text-[11px] uppercase tracking-[0.22em] text-espresso transition-all duration-500 hover:border-espresso hover:bg-blush/40"
+              <div className="mt-8 grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => go("/wishlist")}
+                  className="border border-espresso/15 bg-blush/40 px-4 py-3.5 text-center font-sans text-[10px] uppercase tracking-[0.16em] text-espresso active:bg-blush"
+                >
+                  Wishlist
+                </button>
+                <button
+                  type="button"
+                  onClick={() => go("/account")}
+                  className="border border-espresso/15 bg-blush/40 px-4 py-3.5 text-center font-sans text-[10px] uppercase tracking-[0.16em] text-espresso active:bg-blush"
+                >
+                  Account
+                </button>
+              </div>
+
+              <div className="mt-8 space-y-5 text-center">
+                <button
+                  type="button"
+                  onClick={() => go("/custom-order")}
+                  className="inline-flex border border-espresso/25 px-10 py-3.5 font-sans text-[11px] uppercase tracking-[0.22em] text-espresso transition-all duration-300 active:bg-blush/40"
                 >
                   Begin Consultation
-                </Link>
+                </button>
                 <p className="font-sans text-xs tracking-wide text-espresso/40">
                   WhatsApp {SITE.phoneDisplay}
                 </p>
-              </motion.div>
+              </div>
             </nav>
           </motion.div>
         )}

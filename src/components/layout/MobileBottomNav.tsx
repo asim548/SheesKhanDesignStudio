@@ -29,6 +29,7 @@ export default function MobileBottomNav() {
 
   return (
     <nav
+      data-mobile-tabs
       className="fixed inset-x-0 bottom-0 z-[70] border-t border-espresso/10 bg-ivory/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_30px_rgba(61,43,34,0.06)] backdrop-blur-xl lg:hidden"
       aria-label="Mobile tabs"
     >

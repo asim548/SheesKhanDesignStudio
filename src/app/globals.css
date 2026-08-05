@@ -22,6 +22,12 @@ body {
   line-height: 1.65;
 }
 
+/* Full-screen mobile menu sits above bottom tabs — hide tabs so taps reach nav links */
+body.mobile-menu-open [data-mobile-tabs] {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 ::selection {
   background: var(--blush);
   color: var(--espresso);
