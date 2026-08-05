@@ -2,11 +2,9 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Logo from "@/components/ui/Logo";
 
 export default function AdminLoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,9 +16,10 @@ export default function AdminLoginPage() {
     setError("");
 
     const result = await signIn("credentials", {
-      email,
+      email: email.trim().toLowerCase(),
       password,
       redirect: false,
+      callbackUrl: "/studio-admin",
     });
 
     setLoading(false);
@@ -28,14 +27,14 @@ export default function AdminLoginPage() {
     if (result?.error) {
       setError(
         result.error === "Configuration"
-          ? "Server auth is not configured. Check NEXTAUTH_SECRET and NEXTAUTH_URL on Vercel."
-          : "Invalid credentials. Confirm ADMIN_EMAIL / ADMIN_PASSWORD on Vercel match what you type."
+          ? "Server auth is not configured. On Vercel set NEXTAUTH_SECRET and NEXTAUTH_URL (no trailing slash), then Redeploy."
+          : "Invalid credentials. Use the exact ADMIN_EMAIL / ADMIN_PASSWORD from Vercel Environment Variables."
       );
       return;
     }
 
-    router.push("/studio-admin");
-    router.refresh();
+    // Hard navigation so the session cookie is always picked up by middleware
+    window.location.assign(result?.url || "/studio-admin");
   };
 
   return (

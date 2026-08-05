@@ -4,6 +4,10 @@ import bcrypt from "bcryptjs";
 import { connectDB } from "./mongodb";
 import { User } from "@/models/User";
 
+function cleanEnv(value?: string) {
+  return value?.trim().replace(/^["']|["']$/g, "") || "";
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -15,7 +19,8 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        if (!process.env.NEXTAUTH_SECRET) {
+        const secret = cleanEnv(process.env.NEXTAUTH_SECRET);
+        if (!secret) {
           console.error("[auth] NEXTAUTH_SECRET is not set");
           return null;
         }
@@ -29,19 +34,13 @@ export const authOptions: NextAuthOptions = {
 
         const email = credentials.email.trim().toLowerCase();
         const password = credentials.password;
-        const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-        const adminPassword = process.env.ADMIN_PASSWORD;
+        const adminEmail = cleanEnv(process.env.ADMIN_EMAIL).toLowerCase();
+        const adminPassword = cleanEnv(process.env.ADMIN_PASSWORD);
 
         let user = await User.findOne({ email });
 
-        // Bootstrap admin from env if this account does not exist yet
         if (!user) {
-          if (
-            adminEmail &&
-            adminPassword &&
-            email === adminEmail &&
-            password === adminPassword
-          ) {
+          if (adminEmail && adminPassword && email === adminEmail && password === adminPassword) {
             const hashed = await bcrypt.hash(adminPassword, 12);
             user = await User.create({
               email: adminEmail,
@@ -51,17 +50,16 @@ export const authOptions: NextAuthOptions = {
             });
             console.log("[auth] Admin user bootstrapped:", adminEmail);
           } else {
-            console.warn("[auth] No user found and bootstrap did not match", {
+            console.warn("[auth] Bootstrap failed", {
               email,
-              hasAdminEmail: Boolean(adminEmail),
-              hasAdminPassword: Boolean(adminPassword),
+              adminEmailSet: Boolean(adminEmail),
+              passwordMatch: adminPassword ? password === adminPassword : false,
             });
             return null;
           }
         } else {
           let valid = await bcrypt.compare(password, user.password);
 
-          // If env credentials match, resync password hash (fixes prod drift)
           if (
             !valid &&
             adminEmail &&
@@ -69,8 +67,7 @@ export const authOptions: NextAuthOptions = {
             email === adminEmail &&
             password === adminPassword
           ) {
-            const hashed = await bcrypt.hash(adminPassword, 12);
-            user.password = hashed;
+            user.password = await bcrypt.hash(adminPassword, 12);
             await user.save();
             valid = true;
             console.log("[auth] Admin password resynced from env");
@@ -91,7 +88,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  session: { strategy: "jwt" },
+  session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 },
   pages: {
     signIn: "/studio-admin/login",
   },
@@ -110,5 +107,5 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: cleanEnv(process.env.NEXTAUTH_SECRET) || process.env.NEXTAUTH_SECRET,
 };
