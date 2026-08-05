@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
-import { useWishlist } from "@/lib/wishlist";
+import { useWishlist, wishlistHref } from "@/lib/wishlist";
 import { formatPrice } from "@/lib/cart";
 
 export default function WishlistPage() {
@@ -28,15 +28,20 @@ export default function WishlistPage() {
               <p className="font-sans text-espresso/55">
                 You haven&apos;t saved any pieces yet.
               </p>
-              <Link href="/shop" className="btn-primary mt-8 inline-flex">
-                Explore Ready to Wear
-              </Link>
+              <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+                <Link href="/shop" className="btn-primary inline-flex">
+                  Explore Ready to Wear
+                </Link>
+                <Link href="/collections" className="btn-outline inline-flex">
+                  Browse Collections
+                </Link>
+              </div>
             </div>
           ) : (
             <div className="mt-12 grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((item) => (
                 <div key={item.productId} className="relative text-center">
-                  <Link href={`/shop/${item.slug}`} className="group block">
+                  <Link href={wishlistHref(item)} className="group block">
                     <div className="relative aspect-[3/4] overflow-hidden bg-blush/25">
                       {item.imageUrl && (
                         <Image
@@ -48,12 +53,18 @@ export default function WishlistPage() {
                         />
                       )}
                     </div>
-                    <h2 className="mt-4 font-serif text-2xl font-light text-espresso">
+                    <p className="mt-4 font-sans text-[10px] uppercase tracking-[0.16em] text-espresso/40">
+                      {item.kind === "design" ? "Made to Order" : "Ready to Wear"}
+                    </p>
+                    <h2 className="mt-2 font-serif text-2xl font-light text-espresso">
                       {item.title}
                     </h2>
-                    <p className="mt-2 font-sans text-sm text-espresso/55">
-                      {formatPrice(item.price, item.currency)}
-                    </p>
+                    {item.kind !== "design" &&
+                      typeof item.price === "number" && (
+                        <p className="mt-2 font-sans text-sm text-espresso/55">
+                          {formatPrice(item.price, item.currency || "PKR")}
+                        </p>
+                      )}
                   </Link>
                   <button
                     type="button"

@@ -149,6 +149,7 @@ export default function ProductPurchasePanel({ product }: { product: IProduct })
             currency: product.currency || "PKR",
             imageUrl: product.images[0]?.url,
             category: product.category,
+            kind: "product",
           }}
         />
       </div>

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import FadeIn from "@/components/ui/FadeIn";
 import Button from "@/components/ui/Button";
+import WishlistButton from "@/components/shop/WishlistButton";
 import { getDesignBySlug, getDesigns } from "@/lib/data";
 import { DESIGN_CATEGORIES } from "@/lib/constants";
 
@@ -86,7 +87,7 @@ export default async function DesignDetailPage({ params }: Props) {
             </div>
           </FadeIn>
 
-          <FadeIn delay={0.35} className="mt-12 flex flex-col gap-4 sm:flex-row">
+          <FadeIn delay={0.35} className="mt-12 flex flex-col gap-4 sm:flex-row sm:items-center">
             <Button
               href={`/custom-order?design=${encodeURIComponent(design.title)}`}
             >
@@ -95,6 +96,18 @@ export default async function DesignDetailPage({ params }: Props) {
             <Button href="/collections" variant="outline">
               Back to Collections
             </Button>
+            <WishlistButton
+              showLabel
+              className="self-start sm:self-center"
+              item={{
+                productId: design._id,
+                title: design.title,
+                slug: design.slug,
+                imageUrl: design.images[0]?.url,
+                category: design.category,
+                kind: "design",
+              }}
+            />
           </FadeIn>
         </div>
       </section>

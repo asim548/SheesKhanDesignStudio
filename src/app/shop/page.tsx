@@ -133,6 +133,7 @@ export default async function ShopPage({ searchParams }: Props) {
                         currency: product.currency || "PKR",
                         imageUrl: product.images[0]?.url,
                         category: product.category,
+                        kind: "product",
                       }}
                     />
                   </div>
