@@ -1,19 +1,26 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { useLightMotion } from "@/lib/use-light-motion";
 
 /**
- * Fashion-model video backdrop — clear model visibility with soft edge vignette
- * so the logo and CTAs stay readable.
+ * Fashion-model video backdrop — plays on mobile and desktop.
+ * Skips only when the user prefers reduced motion.
  */
 export default function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [ready, setReady] = useState(false);
-  const lightMotion = useLightMotion();
+  const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
-    if (lightMotion) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduceMotion(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    if (reduceMotion) return;
 
     const v = videoRef.current;
     if (!v) return;
@@ -24,10 +31,10 @@ export default function HeroVideo() {
       v.muted = true;
       v.defaultMuted = true;
       v.playsInline = true;
-      v.playbackRate = 1.6;
-      v.play()
-        .then(markReady)
-        .catch(() => undefined);
+      v.setAttribute("playsinline", "");
+      v.setAttribute("webkit-playsinline", "");
+      v.playbackRate = 1.35;
+      void v.play().then(markReady).catch(() => undefined);
     };
 
     const onReady = () => {
@@ -49,9 +56,9 @@ export default function HeroVideo() {
       v.removeEventListener("playing", markReady);
       v.removeEventListener("loadedmetadata", tryPlay);
     };
-  }, [lightMotion]);
+  }, [reduceMotion]);
 
-  if (lightMotion) {
+  if (reduceMotion) {
     return (
       <div className="absolute inset-0 overflow-hidden bg-gradient-to-b from-blush/60 via-ivory/40 to-blush/50" />
     );
@@ -60,14 +67,14 @@ export default function HeroVideo() {
   return (
     <div className="absolute inset-0 overflow-hidden bg-espresso/10">
       <div
-        className={`absolute inset-0 bg-blush/40 transition-opacity duration-1000 ${
+        className={`absolute inset-0 bg-blush/35 transition-opacity duration-700 ${
           ready ? "opacity-0" : "opacity-100"
         }`}
       />
 
       <video
         ref={videoRef}
-        className={`absolute inset-0 h-full w-full scale-[1.03] object-cover transition-opacity duration-[1.2s] ease-luxury ${
+        className={`absolute inset-0 h-full w-full scale-[1.02] object-cover object-center transition-opacity duration-700 ${
           ready ? "opacity-100" : "opacity-0"
         }`}
         src="/videos/video-model.mp4"
@@ -75,13 +82,13 @@ export default function HeroVideo() {
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="auto"
         aria-hidden
       />
 
-      {/* Soft vignette — keep center clear for logo & CTAs */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ivory/40 via-transparent to-ivory/55" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-ivory/25 via-transparent to-ivory/25" />
+      {/* Soft wash — video stays visible, text stays readable */}
+      <div className="pointer-events-none absolute inset-0 bg-ivory/25 md:bg-ivory/20" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-ivory/45 via-transparent to-ivory/50" />
     </div>
   );
 }
