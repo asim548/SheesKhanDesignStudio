@@ -49,14 +49,6 @@ export default function Hero() {
           </Button>
         </div>
       </div>
-
-      {/* Scroll cue — desktop only (mobile has bottom nav; avoids overlap) */}
-      <div className="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 lg:block">
-        <div className="flex flex-col items-center gap-2">
-          <span className="label-luxury text-espresso/50">Scroll</span>
-          <div className="h-10 w-px bg-espresso/30" />
-        </div>
-      </div>
     </section>
   );
 }

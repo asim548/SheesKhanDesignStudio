@@ -5,6 +5,7 @@ import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Button from "@/components/ui/Button";
+import WishlistButton from "@/components/shop/WishlistButton";
 import { PRODUCT_CATEGORIES } from "@/lib/constants";
 import { formatPrice } from "@/lib/cart";
 import type { IProduct } from "@/models/Product";
@@ -29,26 +30,41 @@ export default function FeaturedReadyToWear({
           const cat = PRODUCT_CATEGORIES.find((c) => c.value === product.category);
           return (
             <FadeIn key={product._id} delay={i * 0.12}>
-              <Link href={`/shop/${product.slug}`} className="group block text-center">
-                <div className="relative aspect-[3/4] overflow-hidden bg-ivory">
-                  {product.images[0] && (
-                    <Image
-                      src={product.images[0].url}
-                      alt={product.images[0].alt || product.title}
-                      fill
-                      className="object-cover transition-transform duration-[1.2s] ease-luxury group-hover:scale-105"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                  )}
-                </div>
-                <p className="mt-5 label-luxury">{cat?.label}</p>
-                <h3 className="mt-1 font-serif text-2xl font-light tracking-wide text-espresso">
-                  {product.title.toUpperCase()}
-                </h3>
-                <p className="mt-2 font-sans text-sm text-espresso/55">
-                  {formatPrice(product.price, product.currency)}
-                </p>
-              </Link>
+              <div className="relative text-center">
+                <Link href={`/shop/${product.slug}`} className="group block">
+                  <div className="relative aspect-[3/4] overflow-hidden bg-ivory">
+                    {product.images[0] && (
+                      <Image
+                        src={product.images[0].url}
+                        alt={product.images[0].alt || product.title}
+                        fill
+                        className="object-cover transition-transform duration-[1.2s] ease-luxury group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    )}
+                  </div>
+                  <p className="mt-5 label-luxury">{cat?.label}</p>
+                  <h3 className="mt-1 font-serif text-2xl font-light tracking-wide text-espresso">
+                    {product.title.toUpperCase()}
+                  </h3>
+                  <p className="mt-2 font-sans text-sm text-espresso/55">
+                    {formatPrice(product.price, product.currency)}
+                  </p>
+                </Link>
+                <WishlistButton
+                  className="absolute right-3 top-3 z-20 h-10 w-10 bg-ivory/90 backdrop-blur-sm hover:bg-blush"
+                  item={{
+                    productId: product._id,
+                    title: product.title,
+                    slug: product.slug,
+                    price: product.price,
+                    currency: product.currency || "PKR",
+                    imageUrl: product.images[0]?.url,
+                    category: product.category,
+                    kind: "product",
+                  }}
+                />
+              </div>
             </FadeIn>
           );
         })}
