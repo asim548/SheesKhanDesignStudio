@@ -15,20 +15,32 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        await connectDB();
+        if (!process.env.NEXTAUTH_SECRET) {
+          console.error("[auth] NEXTAUTH_SECRET is not set");
+          return null;
+        }
 
-        let user = await User.findOne({ email: credentials.email.toLowerCase() });
+        try {
+          await connectDB();
+        } catch (error) {
+          console.error("[auth] MongoDB connection failed", error);
+          return null;
+        }
 
-        // Bootstrap admin from env if no users exist
+        const email = credentials.email.trim().toLowerCase();
+        const password = credentials.password;
+        const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+        const adminPassword = process.env.ADMIN_PASSWORD;
+
+        let user = await User.findOne({ email });
+
+        // Bootstrap admin from env if this account does not exist yet
         if (!user) {
-          const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase();
-          const adminPassword = process.env.ADMIN_PASSWORD;
-
           if (
             adminEmail &&
             adminPassword &&
-            credentials.email.toLowerCase() === adminEmail &&
-            credentials.password === adminPassword
+            email === adminEmail &&
+            password === adminPassword
           ) {
             const hashed = await bcrypt.hash(adminPassword, 12);
             user = await User.create({
@@ -37,15 +49,37 @@ export const authOptions: NextAuthOptions = {
               name: "Shees Khan",
               role: "admin",
             });
+            console.log("[auth] Admin user bootstrapped:", adminEmail);
           } else {
+            console.warn("[auth] No user found and bootstrap did not match", {
+              email,
+              hasAdminEmail: Boolean(adminEmail),
+              hasAdminPassword: Boolean(adminPassword),
+            });
             return null;
           }
         } else {
-          const valid = await bcrypt.compare(
-            credentials.password,
-            user.password
-          );
-          if (!valid) return null;
+          let valid = await bcrypt.compare(password, user.password);
+
+          // If env credentials match, resync password hash (fixes prod drift)
+          if (
+            !valid &&
+            adminEmail &&
+            adminPassword &&
+            email === adminEmail &&
+            password === adminPassword
+          ) {
+            const hashed = await bcrypt.hash(adminPassword, 12);
+            user.password = hashed;
+            await user.save();
+            valid = true;
+            console.log("[auth] Admin password resynced from env");
+          }
+
+          if (!valid) {
+            console.warn("[auth] Invalid password for", email);
+            return null;
+          }
         }
 
         return {

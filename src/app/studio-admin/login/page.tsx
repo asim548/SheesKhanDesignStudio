@@ -26,7 +26,11 @@ export default function AdminLoginPage() {
     setLoading(false);
 
     if (result?.error) {
-      setError("Invalid credentials");
+      setError(
+        result.error === "Configuration"
+          ? "Server auth is not configured. Check NEXTAUTH_SECRET and NEXTAUTH_URL on Vercel."
+          : "Invalid credentials. Confirm ADMIN_EMAIL / ADMIN_PASSWORD on Vercel match what you type."
+      );
       return;
     }
 
