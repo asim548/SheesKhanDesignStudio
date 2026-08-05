@@ -1,23 +1,88 @@
+@import "lenis/dist/lenis.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ivory: #faf7f2;
+  --espresso: #3d2b22;
+  --blush: #e8d5d0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--espresso);
+  background: var(--ivory);
+  font-family: var(--font-jost), system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+::selection {
+  background: var(--blush);
+  color: var(--espresso);
+}
+
+@layer components {
+  .label-luxury {
+    @apply font-sans text-[13px] uppercase tracking-[0.2em] text-espresso/70;
+  }
+
+  .heading-display {
+    @apply font-serif font-light tracking-wide text-espresso;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center bg-espresso px-9 py-4
+      font-sans text-[13px] uppercase tracking-[0.18em] text-ivory
+      transition-all duration-luxury ease-luxury
+      hover:-translate-y-0.5 hover:bg-espresso/90 hover:shadow-[0_12px_28px_rgba(61,43,34,0.2)]
+      focus-visible:outline focus-visible:outline-2
+      focus-visible:outline-offset-2 focus-visible:outline-espresso;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center border border-espresso/30
+      bg-transparent px-9 py-4 font-sans text-[13px] uppercase tracking-[0.18em]
+      text-espresso transition-all duration-luxury ease-luxury
+      hover:-translate-y-0.5 hover:border-espresso hover:bg-blush/50
+      hover:shadow-[0_10px_24px_rgba(61,43,34,0.08)]
+      focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+      focus-visible:outline-espresso;
+  }
+
+  /* Larger, clearer type for the studio admin panel only */
+  .admin-shell .label-luxury {
+    @apply text-sm tracking-[0.18em];
+  }
+
+  .admin-shell .btn-primary,
+  .admin-shell .btn-outline {
+    @apply px-9 py-4 text-sm tracking-[0.16em];
+  }
+
+  .admin-shell .input-field {
+    @apply py-3.5 text-base;
+  }
+
+  .admin-shell h1.heading-display {
+    @apply text-4xl md:text-5xl;
+  }
+
+  .section-pad {
+    @apply px-6 py-20 md:px-12 md:py-28 lg:px-20 lg:py-32;
+  }
+
+  .input-field {
+    @apply w-full border-b border-espresso/20 bg-transparent px-0 py-3.5
+      font-sans text-base text-espresso placeholder:text-espresso/40
+      transition-colors duration-luxury focus:border-espresso
+      focus:outline-none;
+  }
 }
 
 @layer utilities {

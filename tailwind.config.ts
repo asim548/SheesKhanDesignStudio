@@ -9,8 +9,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        ivory: "#FAF7F2",
+        espresso: "#3D2B22",
+        blush: "#E8D5D0",
+      },
+      fontFamily: {
+        serif: ["var(--font-cormorant)", "Georgia", "serif"],
+        sans: ["var(--font-jost)", "system-ui", "sans-serif"],
+      },
+      letterSpacing: {
+        luxury: "0.2em",
+        "luxury-wide": "0.3em",
+      },
+      transitionDuration: {
+        luxury: "800ms",
+        "luxury-slow": "1200ms",
+      },
+      transitionTimingFunction: {
+        luxury: "cubic-bezier(0.22, 1, 0.36, 1)",
       },
     },
   },
