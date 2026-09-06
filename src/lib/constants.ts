@@ -3,6 +3,7 @@ export const SITE = {
   designer: "Muhammad Shees Khan Gormani",
   studio: "Shees Khan Design Studio",
   domain: "sheeskhandesignstudio",
+  url: "https://www.sheeskhandesignstudio.com",
   email: "sheeskhangormani@gmail.com",
   phone: "+923185088200",
   phoneDisplay: "+92 318 5088200",

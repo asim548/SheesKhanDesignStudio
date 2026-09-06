@@ -22,7 +22,7 @@ const jost = Jost({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+    process.env.NEXT_PUBLIC_SITE_URL || SITE.url || "http://localhost:3000"
   ),
   title: {
     default: `${SITE.name} — Luxury Bridal & Couture`,
@@ -54,6 +54,7 @@ export default function RootLayout({
 }>) {
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+    SITE.url ||
     "http://localhost:3000";
   const organizationJsonLd = {
     "@context": "https://schema.org",

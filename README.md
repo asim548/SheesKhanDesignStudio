@@ -2,7 +2,7 @@
 
 Official website for **Shees Khan Design Studio** — luxury bridal couture, made-to-order bespoke, and ready-to-wear.
 
-**Live site:** [https://shees-khan-design-studio.vercel.app](https://shees-khan-design-studio.vercel.app)
+**Live site:** [https://www.sheeskhandesignstudio.com](https://www.sheeskhandesignstudio.com)
 
 **Stack:** Next.js 14 (App Router) · TypeScript · Tailwind CSS · Framer Motion · MongoDB · NextAuth · Cloudinary · Resend · Zustand
 
@@ -43,9 +43,9 @@ Copy `.env.example` → `.env.local`:
 | Variable | Purpose |
 |---|---|
 | `MONGODB_URI` | MongoDB Atlas connection string |
-| `NEXTAUTH_URL` | Site URL (`https://shees-khan-design-studio.vercel.app` in production) |
+| `NEXTAUTH_URL` | Site URL (`https://www.sheeskhandesignstudio.com` in production) |
 | `NEXTAUTH_SECRET` | Random secret (`openssl rand -base64 32`) |
-| `NEXT_PUBLIC_SITE_URL` | Public site URL (`https://shees-khan-design-studio.vercel.app`) |
+| `NEXT_PUBLIC_SITE_URL` | Public site URL (`https://www.sheeskhandesignstudio.com`) |
 | `ADMIN_EMAIL` | Studio login email |
 | `ADMIN_PASSWORD` | Studio login password |
 | `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name |
@@ -90,12 +90,12 @@ npm run seed     # Seed sample data (requires env)
 
 ## Deploy (Vercel)
 
-Live deployment: [https://shees-khan-design-studio.vercel.app](https://shees-khan-design-studio.vercel.app)
+Live deployment: [https://www.sheeskhandesignstudio.com](https://www.sheeskhandesignstudio.com)
 
 1. Import [asim548/SheesKhanDesignStudio](https://github.com/asim548/SheesKhanDesignStudio) in [Vercel](https://vercel.com)
 2. Add environment variables from `.env.example`
 3. Set `NEXTAUTH_URL` and `NEXT_PUBLIC_SITE_URL` to  
-   `https://shees-khan-design-studio.vercel.app`
+   `https://www.sheeskhandesignstudio.com`
 4. Deploy
 
 ### Supporting services

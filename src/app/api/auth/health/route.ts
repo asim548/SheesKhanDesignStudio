@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
     ok,
     checks,
     hint: !ok
-      ? "Fix failing checks, then Redeploy on Vercel. NEXTAUTH_URL must be https://shees-khan-design-studio.vercel.app with NO trailing slash."
+      ? `Fix failing checks, then Redeploy on Vercel. NEXTAUTH_URL must be ${process.env.NEXT_PUBLIC_SITE_URL || "https://www.sheeskhandesignstudio.com"} with NO trailing slash.`
       : "Config looks OK. If login still fails, use exact ADMIN_PASSWORD from Vercel and hard-refresh.",
   });
 }
