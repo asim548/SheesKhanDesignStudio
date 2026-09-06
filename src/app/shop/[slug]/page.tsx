@@ -46,6 +46,7 @@ export default async function ProductDetailPage({ params }: Props) {
 
   const baseUrl =
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+    SITE.url ||
     "http://localhost:3000";
   const category = PRODUCT_CATEGORIES.find(
     (item) => item.value === product.category
