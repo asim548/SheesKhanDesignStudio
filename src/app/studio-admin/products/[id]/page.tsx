@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 import AdminNav from "@/components/admin/AdminNav";
 import { PRODUCT_CATEGORIES, PRODUCT_SIZES } from "@/lib/constants";
+import { adminFetch, uploadAdminImage } from "@/lib/prepare-image-upload";
 
 export default function EditProductPage() {
   const { id } = useParams<{ id: string }>();
@@ -13,6 +14,7 @@ export default function EditProductPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadNote, setUploadNote] = useState("");
   const [error, setError] = useState("");
   const [form, setForm] = useState({
     title: "",
@@ -89,13 +91,16 @@ export default function EditProductPage() {
   const onDrop = async (files: FileList | null) => {
     if (!files?.length) return;
     setUploading(true);
+    setError("");
+    setUploadNote("");
     try {
       for (const file of Array.from(files)) {
-        const fd = new FormData();
-        fd.append("file", file);
-        const res = await fetch("/api/upload", { method: "POST", body: fd });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Upload failed");
+        const data = await uploadAdminImage(file);
+        if (data.demo) {
+          setUploadNote(
+            "Demo placeholder used — add Cloudinary keys on Vercel for real product photos."
+          );
+        }
         setForm((f) => ({
           ...f,
           images: [...f.images, { url: data.url, publicId: data.publicId }],
@@ -113,12 +118,18 @@ export default function EditProductPage() {
     setSaving(true);
     setError("");
     try {
-      const res = await fetch(`/api/products/${id}`, {
+      const res = await adminFetch(`/api/products/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, price: Number(form.price) }),
       });
-      if (!res.ok) throw new Error("Save failed");
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 401) {
+          throw new Error("Session expired — log in again at Studio Admin.");
+        }
+        throw new Error(data.error || "Save failed");
+      }
       router.push("/studio-admin/products");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Save failed");
@@ -301,6 +312,10 @@ export default function EditProductPage() {
               <option value="sold-out">Sold Out</option>
             </select>
           </div>
+          {uploadNote && (
+            <p className="text-sm text-espresso/55">{uploadNote}</p>
+          )}
+
           {error && <p className="text-sm text-espresso/70">{error}</p>}
           <button type="submit" className="btn-primary" disabled={saving}>
             {saving ? "Saving…" : "Update Product"}

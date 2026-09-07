@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import AdminNav from "@/components/admin/AdminNav";
 import { PRODUCT_CATEGORIES, PRODUCT_SIZES } from "@/lib/constants";
+import { adminFetch, uploadAdminImage } from "@/lib/prepare-image-upload";
 
 const defaultSizes = PRODUCT_SIZES.map((label) => ({
   label,
@@ -17,6 +18,7 @@ export default function NewProductPage() {
   const fileRef = useRef<HTMLInputElement>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadNote, setUploadNote] = useState("");
   const [error, setError] = useState("");
   const [form, setForm] = useState({
     title: "",
@@ -49,13 +51,15 @@ export default function NewProductPage() {
     if (!files?.length) return;
     setUploading(true);
     setError("");
+    setUploadNote("");
     try {
       for (const file of Array.from(files)) {
-        const fd = new FormData();
-        fd.append("file", file);
-        const res = await fetch("/api/upload", { method: "POST", body: fd });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Upload failed");
+        const data = await uploadAdminImage(file);
+        if (data.demo) {
+          setUploadNote(
+            "Demo placeholder used — add Cloudinary keys on Vercel for real product photos."
+          );
+        }
         setForm((f) => ({
           ...f,
           images: [
@@ -76,7 +80,7 @@ export default function NewProductPage() {
     setSaving(true);
     setError("");
     try {
-      const res = await fetch("/api/products", {
+      const res = await adminFetch("/api/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -85,7 +89,10 @@ export default function NewProductPage() {
         }),
       });
       if (!res.ok) {
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 401) {
+          throw new Error("Session expired — log in again at Studio Admin.");
+        }
         throw new Error(data.error || "Save failed");
       }
       router.push("/studio-admin/products");
@@ -256,6 +263,10 @@ export default function NewProductPage() {
               <option value="sold-out">Sold Out</option>
             </select>
           </div>
+
+          {uploadNote && (
+            <p className="text-sm text-espresso/55">{uploadNote}</p>
+          )}
 
           {error && <p className="text-sm text-espresso/70">{error}</p>}
           <button type="submit" className="btn-primary" disabled={saving}>

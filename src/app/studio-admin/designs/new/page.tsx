@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import AdminNav from "@/components/admin/AdminNav";
 import { DESIGN_CATEGORIES } from "@/lib/constants";
+import { adminFetch, uploadAdminImage } from "@/lib/prepare-image-upload";
 
 export default function NewDesignPage() {
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [uploadNote, setUploadNote] = useState("");
   const [error, setError] = useState("");
   const [form, setForm] = useState({
     title: "",
@@ -30,13 +32,15 @@ export default function NewDesignPage() {
     if (!files?.length) return;
     setUploading(true);
     setError("");
+    setUploadNote("");
     try {
       for (const file of Array.from(files)) {
-        const fd = new FormData();
-        fd.append("file", file);
-        const res = await fetch("/api/upload", { method: "POST", body: fd });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Upload failed");
+        const data = await uploadAdminImage(file);
+        if (data.demo) {
+          setUploadNote(
+            "Demo placeholder used — add Cloudinary keys on Vercel for real design photos."
+          );
+        }
         setForm((f) => ({
           ...f,
           images: [
@@ -57,13 +61,16 @@ export default function NewDesignPage() {
     setSaving(true);
     setError("");
     try {
-      const res = await fetch("/api/designs", {
+      const res = await adminFetch("/api/designs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
       if (!res.ok) {
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 401) {
+          throw new Error("Session expired — log in again at Studio Admin.");
+        }
         throw new Error(data.error || "Save failed");
       }
       router.push("/studio-admin/designs");
@@ -190,6 +197,10 @@ export default function NewDesignPage() {
               Published
             </label>
           </div>
+
+          {uploadNote && (
+            <p className="text-sm text-espresso/55">{uploadNote}</p>
+          )}
 
           {error && <p className="text-sm text-espresso/70">{error}</p>}
 
