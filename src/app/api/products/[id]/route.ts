@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectDB } from "@/lib/mongodb";
 import { Product } from "@/models/Product";
+import { revalidateProducts } from "@/lib/revalidate-catalog";
 
 interface Params {
   params: { id: string };
@@ -31,6 +31,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
   try {
     const body = await req.json();
     await connectDB();
+    const previous = await Product.findById(params.id).select("slug").lean();
     const product = await Product.findByIdAndUpdate(
       params.id,
       {
@@ -54,7 +55,12 @@ export async function PUT(req: NextRequest, { params }: Params) {
     if (!product) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
-    revalidateTag("products");
+    revalidateProducts(previous?.slug);
+    if (body.slug && body.slug !== previous?.slug) {
+      revalidateProducts(body.slug);
+    } else {
+      revalidateProducts(product.slug);
+    }
     return NextResponse.json(product);
   } catch (error) {
     console.error(error);
@@ -73,8 +79,9 @@ export async function DELETE(_req: NextRequest, { params }: Params) {
 
   try {
     await connectDB();
+    const existing = await Product.findById(params.id).select("slug").lean();
     await Product.findByIdAndDelete(params.id);
-    revalidateTag("products");
+    revalidateProducts(existing?.slug);
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json(

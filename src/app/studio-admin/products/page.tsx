@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import AdminNav from "@/components/admin/AdminNav";
 import { formatPrice } from "@/lib/cart";
+import { adminFetch } from "@/lib/prepare-image-upload";
 
 interface Product {
   _id: string;
@@ -23,9 +24,10 @@ interface Product {
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("/api/products?admin=true")
+    adminFetch("/api/products?admin=true")
       .then((r) => r.json())
       .then((data) => {
         if (Array.isArray(data)) setProducts(data);
@@ -34,9 +36,18 @@ export default function AdminProductsPage() {
   }, []);
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this product?")) return;
-    await fetch(`/api/products/${id}`, { method: "DELETE" });
-    setProducts((p) => p.filter((x) => x._id !== id));
+    if (!confirm("Delete this product? It will be removed from the live website.")) return;
+    setError("");
+    try {
+      const res = await adminFetch(`/api/products/${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Delete failed");
+      }
+      setProducts((p) => p.filter((x) => x._id !== id));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Delete failed");
+    }
   };
 
   return (
@@ -49,6 +60,10 @@ export default function AdminProductsPage() {
             Add Product
           </Link>
         </div>
+
+        {error && (
+          <p className="mt-6 font-sans text-sm text-espresso/70">{error}</p>
+        )}
 
         {loading ? (
           <p className="mt-12 font-sans text-base text-espresso/50">Loading…</p>

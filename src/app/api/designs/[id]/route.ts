@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectDB } from "@/lib/mongodb";
 import { Design } from "@/models/Design";
+import { revalidateDesigns } from "@/lib/revalidate-catalog";
 
 export async function GET(
   _req: NextRequest,
@@ -40,7 +40,7 @@ export async function PUT(
     if (!updated) {
       return NextResponse.json({ error: "Not found" }, { status: 404 });
     }
-    revalidateTag("designs");
+    revalidateDesigns(updated.slug);
     return NextResponse.json(updated);
   } catch (error) {
     console.error(error);
@@ -59,8 +59,9 @@ export async function DELETE(
 
   try {
     await connectDB();
+    const existing = await Design.findById(params.id).select("slug").lean();
     await Design.findByIdAndDelete(params.id);
-    revalidateTag("designs");
+    revalidateDesigns(existing?.slug);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error(error);

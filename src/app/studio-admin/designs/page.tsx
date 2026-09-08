@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import AdminNav from "@/components/admin/AdminNav";
+import { adminFetch } from "@/lib/prepare-image-upload";
 
 interface Design {
   _id: string;
@@ -18,9 +19,10 @@ interface Design {
 export default function AdminDesignsPage() {
   const [designs, setDesigns] = useState<Design[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("/api/designs?admin=true")
+    adminFetch("/api/designs?admin=true")
       .then((r) => r.json())
       .then((data) => {
         if (Array.isArray(data)) setDesigns(data);
@@ -29,9 +31,18 @@ export default function AdminDesignsPage() {
   }, []);
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this design?")) return;
-    await fetch(`/api/designs/${id}`, { method: "DELETE" });
-    setDesigns((d) => d.filter((x) => x._id !== id));
+    if (!confirm("Delete this design? It will be removed from the live website.")) return;
+    setError("");
+    try {
+      const res = await adminFetch(`/api/designs/${id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Delete failed");
+      }
+      setDesigns((d) => d.filter((x) => x._id !== id));
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Delete failed");
+    }
   };
 
   return (
@@ -44,6 +55,10 @@ export default function AdminDesignsPage() {
             Add Design
           </Link>
         </div>
+
+        {error && (
+          <p className="mt-6 font-sans text-sm text-espresso/70">{error}</p>
+        )}
 
         {loading ? (
           <p className="mt-12 font-sans text-base text-espresso/50">Loading…</p>

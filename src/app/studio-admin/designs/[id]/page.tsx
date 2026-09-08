@@ -206,6 +206,9 @@ export default function EditDesignPage() {
                 </div>
               ))}
             </div>
+            <p className="mt-2 font-sans text-xs text-espresso/45">
+              After removing images, click <strong>Save Changes</strong> to update the live site.
+            </p>
           </div>
 
           <div className="flex gap-6">

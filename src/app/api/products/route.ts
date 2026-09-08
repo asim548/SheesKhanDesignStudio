@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectDB } from "@/lib/mongodb";
 import { Product } from "@/models/Product";
 import { getProducts } from "@/lib/data";
+import { revalidateProducts } from "@/lib/revalidate-catalog";
 
 function slugify(title: string) {
   return title
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
       status: body.status || "in-stock",
     });
 
-    revalidateTag("products");
+    revalidateProducts(product.slug);
     return NextResponse.json(product, { status: 201 });
   } catch (error) {
     console.error(error);

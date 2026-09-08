@@ -25,6 +25,11 @@ function serialize<T>(value: T): T {
   return JSON.parse(JSON.stringify(value));
 }
 
+/** Sample data is dev-only when MongoDB is unreachable — never override live DB deletes. */
+function allowDevSampleFallback(): boolean {
+  return process.env.NODE_ENV !== "production";
+}
+
 async function fetchDesigns(options?: {
   category?: string;
   featured?: boolean;
@@ -39,19 +44,20 @@ async function fetchDesigns(options?: {
       .sort({ createdAt: -1 })
       .select("-__v")
       .lean();
-    if (designs.length > 0) return serialize(designs);
-  } catch {
-    // Fall through to sample data
-  }
+    return serialize(designs);
+  } catch (error) {
+    console.error("[data] fetchDesigns failed", error);
+    if (!allowDevSampleFallback()) return [];
 
-  let samples = withIds(SAMPLE_DESIGNS, "sample") as unknown as IDesign[];
-  if (options?.category) {
-    samples = samples.filter((d) => d.category === options.category);
+    let samples = withIds(SAMPLE_DESIGNS, "sample") as unknown as IDesign[];
+    if (options?.category) {
+      samples = samples.filter((d) => d.category === options.category);
+    }
+    if (options?.featured) {
+      samples = samples.filter((d) => d.featured);
+    }
+    return samples;
   }
-  if (options?.featured) {
-    samples = samples.filter((d) => d.featured);
-  }
-  return samples;
 }
 
 async function fetchProducts(options?: {
@@ -68,19 +74,20 @@ async function fetchProducts(options?: {
       .sort({ createdAt: -1 })
       .select("-__v")
       .lean();
-    if (products.length > 0) return serialize(products);
-  } catch {
-    // Fall through
-  }
+    return serialize(products);
+  } catch (error) {
+    console.error("[data] fetchProducts failed", error);
+    if (!allowDevSampleFallback()) return [];
 
-  let samples = withIds(SAMPLE_PRODUCTS, "product") as unknown as IProduct[];
-  if (options?.category) {
-    samples = samples.filter((p) => p.category === options.category);
+    let samples = withIds(SAMPLE_PRODUCTS, "product") as unknown as IProduct[];
+    if (options?.category) {
+      samples = samples.filter((p) => p.category === options.category);
+    }
+    if (options?.featured) {
+      samples = samples.filter((p) => p.featured);
+    }
+    return samples;
   }
-  if (options?.featured) {
-    samples = samples.filter((p) => p.featured);
-  }
-  return samples;
 }
 
 async function fetchTestimonials(): Promise<ITestimonial[]> {
@@ -90,15 +97,16 @@ async function fetchTestimonials(): Promise<ITestimonial[]> {
       .sort({ createdAt: -1 })
       .select("-__v")
       .lean();
-    if (items.length > 0) return serialize(items);
-  } catch {
-    // Fall through
-  }
+    return serialize(items);
+  } catch (error) {
+    console.error("[data] fetchTestimonials failed", error);
+    if (!allowDevSampleFallback()) return [];
 
-  return withIds(
-    SAMPLE_TESTIMONIALS,
-    "testimonial"
-  ) as unknown as ITestimonial[];
+    return withIds(
+      SAMPLE_TESTIMONIALS,
+      "testimonial"
+    ) as unknown as ITestimonial[];
+  }
 }
 
 export async function getDesigns(options?: {
@@ -125,18 +133,20 @@ export async function getDesignBySlug(slug: string): Promise<IDesign | null> {
           .select("-__v")
           .lean();
         if (design) return serialize(design);
-      } catch {
-        // Fall through
-      }
+        return null;
+      } catch (error) {
+        console.error("[data] getDesignBySlug failed", error);
+        if (!allowDevSampleFallback()) return null;
 
-      const sample = SAMPLE_DESIGNS.find((d) => d.slug === slug);
-      if (!sample) return null;
-      return {
-        ...sample,
-        _id: `sample-${slug}`,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      } as IDesign;
+        const sample = SAMPLE_DESIGNS.find((d) => d.slug === slug);
+        if (!sample) return null;
+        return {
+          ...sample,
+          _id: `sample-${slug}`,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        } as IDesign;
+      }
     },
     ["design", slug],
     { revalidate: 60, tags: ["designs"] }
@@ -169,18 +179,20 @@ export async function getProductBySlug(
           .select("-__v")
           .lean();
         if (product) return serialize(product);
-      } catch {
-        // Fall through
-      }
+        return null;
+      } catch (error) {
+        console.error("[data] getProductBySlug failed", error);
+        if (!allowDevSampleFallback()) return null;
 
-      const sample = SAMPLE_PRODUCTS.find((p) => p.slug === slug);
-      if (!sample) return null;
-      return {
-        ...sample,
-        _id: `product-${slug}`,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      } as IProduct;
+        const sample = SAMPLE_PRODUCTS.find((p) => p.slug === slug);
+        if (!sample) return null;
+        return {
+          ...sample,
+          _id: `product-${slug}`,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        } as IProduct;
+      }
     },
     ["product", slug],
     { revalidate: 60, tags: ["products"] }

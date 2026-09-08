@@ -285,6 +285,9 @@ export default function EditProductPage() {
                 </div>
               ))}
             </div>
+            <p className="mt-2 font-sans text-xs text-espresso/45">
+              After removing images, click <strong>Update Product</strong> to save.
+            </p>
           </div>
           <div className="flex flex-wrap gap-6">
             <label className="flex items-center gap-2 font-sans text-sm">
