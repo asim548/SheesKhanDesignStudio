@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
 import { useWishlist, wishlistHref, type WishlistItem } from "@/lib/wishlist";
-import { formatPrice } from "@/lib/cart";
+import PriceDisplay from "@/components/shop/PriceDisplay";
 
 export default function WishlistPage() {
   const items = useWishlist((state) => state.items);
@@ -18,7 +18,7 @@ export default function WishlistPage() {
   const designItems = items.filter((item) => item.kind === "design");
 
   return (
-    <div className="pt-24">
+    <div className="page-offset-header">
       <section className="section-pad pb-10">
         <FadeIn className="mx-auto max-w-5xl">
           <p className="label-luxury mb-3">Saved Pieces</p>
@@ -128,9 +128,12 @@ function WishlistCard({
           {item.title}
         </h2>
         {!isDesign && typeof item.price === "number" && (
-          <p className="mt-2 font-sans text-sm text-espresso/55">
-            {formatPrice(item.price, item.currency || "PKR")}
-          </p>
+          <PriceDisplay
+            amount={item.price}
+            currency={item.currency || "PKR"}
+            layout="stacked"
+            className="mt-2 font-sans text-sm text-espresso/55"
+          />
         )}
       </Link>
 

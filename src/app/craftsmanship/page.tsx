@@ -39,7 +39,7 @@ const STEPS = [
 
 export default function CraftsmanshipPage() {
   return (
-    <div className="pt-24">
+    <div className="page-offset-header">
       <section className="section-pad">
         <SectionHeading
           label="Process"

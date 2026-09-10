@@ -24,7 +24,7 @@ export default async function CollectionsPage({ searchParams }: Props) {
   const designs = await getDesigns({ category });
 
   return (
-    <div className="pt-24">
+    <div className="page-offset-header">
       <section className="section-pad pb-8">
         <SectionHeading
           label="Portfolio"

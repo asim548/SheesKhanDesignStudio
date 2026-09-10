@@ -12,7 +12,7 @@ export default function CartPage() {
   const subtotal = useCart((s) => s.subtotal);
 
   return (
-    <div className="pt-24">
+    <div className="page-offset-header">
       <section className="section-pad">
         <FadeIn className="mx-auto max-w-3xl">
           <p className="label-luxury mb-3">Your Bag</p>

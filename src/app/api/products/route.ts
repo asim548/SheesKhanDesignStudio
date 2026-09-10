@@ -32,9 +32,11 @@ export async function GET(req: NextRequest) {
   }
 
   const category = searchParams.get("category") || undefined;
+  const subCategory = searchParams.get("subCategory") || undefined;
   const featured = searchParams.get("featured") === "true";
   const products = await getProducts({
     category,
+    subCategory,
     featured: featured || undefined,
   });
   return NextResponse.json(products);
@@ -55,6 +57,7 @@ export async function POST(req: NextRequest) {
       title: body.title,
       slug,
       category: body.category,
+      subCategory: body.subCategory || undefined,
       price: body.price,
       currency: body.currency || "PKR",
       sku: body.sku,

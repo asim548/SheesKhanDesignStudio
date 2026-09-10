@@ -1,6 +1,15 @@
 import { Schema, models, model } from "mongoose";
 
 export type ProductCategory = "bridal" | "formals" | "semi-formals" | "luxe-pret";
+export type ProductSubcategory =
+  | "co-ords"
+  | "kaftans"
+  | "core-classics"
+  | "jackets"
+  | "saris"
+  | "lehnga-choli"
+  | "angrakha"
+  | "signature-drapes";
 export type ProductStatus = "in-stock" | "sold-out";
 
 export interface IProductSize {
@@ -14,6 +23,7 @@ export interface IProduct {
   title: string;
   slug: string;
   category: ProductCategory;
+  subCategory?: ProductSubcategory;
   price: number;
   currency: string;
   sku: string;
@@ -37,6 +47,19 @@ const ProductSchema = new Schema<IProduct>(
       type: String,
       enum: ["bridal", "formals", "semi-formals", "luxe-pret"],
       required: true,
+    },
+    subCategory: {
+      type: String,
+      enum: [
+        "co-ords",
+        "kaftans",
+        "core-classics",
+        "jackets",
+        "saris",
+        "lehnga-choli",
+        "angrakha",
+        "signature-drapes",
+      ],
     },
     price: { type: Number, required: true },
     currency: { type: String, default: "PKR" },

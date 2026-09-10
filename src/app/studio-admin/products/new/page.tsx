@@ -4,8 +4,10 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import AdminNav from "@/components/admin/AdminNav";
-import { PRODUCT_CATEGORIES, PRODUCT_SIZES } from "@/lib/constants";
+import { PRODUCT_SIZES, PRODUCT_SUBCATEGORIES } from "@/lib/constants";
 import { adminFetch, uploadAdminImage } from "@/lib/prepare-image-upload";
+import { AdminPricePreview } from "@/components/admin/AdminPricePreview";
+import CategorySubcategoryFields from "@/components/admin/CategorySubcategoryFields";
 
 const defaultSizes = PRODUCT_SIZES.map((label) => ({
   label,
@@ -23,6 +25,7 @@ export default function NewProductPage() {
   const [form, setForm] = useState({
     title: "",
     category: "luxe-pret",
+    subCategory: PRODUCT_SUBCATEGORIES[0].value,
     price: "",
     sku: "",
     description: "",
@@ -86,6 +89,7 @@ export default function NewProductPage() {
         body: JSON.stringify({
           ...form,
           price: Number(form.price),
+          subCategory: form.subCategory || undefined,
         }),
       });
       if (!res.ok) {
@@ -124,20 +128,13 @@ export default function NewProductPage() {
               required
             />
           </Field>
+          <CategorySubcategoryFields
+            category={form.category}
+            subCategory={form.subCategory}
+            onCategoryChange={(value) => set("category", value)}
+            onSubCategoryChange={(value) => set("subCategory", value)}
+          />
           <div className="grid gap-6 sm:grid-cols-2">
-            <Field label="Category">
-              <select
-                className="input-field"
-                value={form.category}
-                onChange={(e) => set("category", e.target.value)}
-              >
-                {PRODUCT_CATEGORIES.map((c) => (
-                  <option key={c.value} value={c.value}>
-                    {c.label}
-                  </option>
-                ))}
-              </select>
-            </Field>
             <Field label="Price (PKR)" required>
               <input
                 type="number"
@@ -147,7 +144,9 @@ export default function NewProductPage() {
                 required
                 min={0}
               />
+              <AdminPricePreview pkr={form.price} />
             </Field>
+            <div aria-hidden className="hidden sm:block" />
           </div>
           <Field label="Description" required>
             <textarea

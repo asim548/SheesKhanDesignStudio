@@ -62,12 +62,14 @@ async function fetchDesigns(options?: {
 
 async function fetchProducts(options?: {
   category?: string;
+  subCategory?: string;
   featured?: boolean;
 }): Promise<IProduct[]> {
   try {
     await connectDB();
     const filter: Record<string, unknown> = { published: true };
     if (options?.category) filter.category = options.category;
+    if (options?.subCategory) filter.subCategory = options.subCategory;
     if (options?.featured) filter.featured = true;
 
     const products = await Product.find(filter)
@@ -82,6 +84,9 @@ async function fetchProducts(options?: {
     let samples = withIds(SAMPLE_PRODUCTS, "product") as unknown as IProduct[];
     if (options?.category) {
       samples = samples.filter((p) => p.category === options.category);
+    }
+    if (options?.subCategory) {
+      samples = samples.filter((p) => p.subCategory === options.subCategory);
     }
     if (options?.featured) {
       samples = samples.filter((p) => p.featured);
@@ -155,11 +160,13 @@ export async function getDesignBySlug(slug: string): Promise<IDesign | null> {
 
 export async function getProducts(options?: {
   category?: string;
+  subCategory?: string;
   featured?: boolean;
 }): Promise<IProduct[]> {
   const key = [
     "products",
     options?.category || "all",
+    options?.subCategory || "all-subs",
     options?.featured ? "featured" : "any",
   ];
   return unstable_cache(() => fetchProducts(options), key, {

@@ -119,7 +119,7 @@ function ConfirmationContent() {
 
 export default function OrderConfirmationPage() {
   return (
-    <div className="pt-24">
+    <div className="page-offset-header">
       <section className="section-pad">
         <Suspense
           fallback={

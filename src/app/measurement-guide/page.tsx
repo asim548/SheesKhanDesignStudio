@@ -42,7 +42,7 @@ const MEASUREMENTS = [
 
 export default function MeasurementGuidePage() {
   return (
-    <div className="pt-24">
+    <div className="page-offset-header">
       <section className="section-pad">
         <SectionHeading
           label="Fit"

@@ -20,7 +20,7 @@ export default async function TestimonialsPage() {
   const quotesOnly = testimonials.filter((t) => !t.image?.url);
 
   return (
-    <div className="pt-24">
+    <div className="page-offset-header">
       <section className="section-pad pb-8">
         <SectionHeading
           label="Real Clients"

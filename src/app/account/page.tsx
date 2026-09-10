@@ -14,7 +14,7 @@ export default function AccountPage() {
   );
 
   return (
-    <div className="pt-24">
+    <div className="page-offset-header">
       <section className="section-pad">
         <FadeIn className="mx-auto max-w-2xl text-center">
           <p className="label-luxury mb-3">Client Care</p>

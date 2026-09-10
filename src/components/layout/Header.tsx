@@ -7,7 +7,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import Logo from "@/components/ui/Logo";
 import CartIcon from "@/components/shop/CartIcon";
 import WishlistIcon from "@/components/shop/WishlistIcon";
-import { NAV_LINKS, SITE } from "@/lib/constants";
+import AnnouncementBar from "@/components/layout/AnnouncementBar";
+import { NAV_LINKS, PRODUCT_CATEGORIES, SITE } from "@/lib/constants";
+
+const SHOP_QUICK_LINKS = PRODUCT_CATEGORIES.map((c) => ({
+  href: `/shop?category=${c.value}`,
+  label: c.label,
+}));
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -53,7 +59,7 @@ export default function Header() {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-[90] transition-[background,border-color,backdrop-filter,padding] duration-700 ease-luxury ${
+        className={`fixed inset-x-0 top-0 z-[90] flex flex-col transition-[background,border-color,backdrop-filter,padding] duration-700 ease-luxury ${
           open
             ? "border-b border-espresso/8 bg-ivory"
             : scrolled
@@ -61,6 +67,8 @@ export default function Header() {
               : "border-b border-transparent bg-gradient-to-b from-ivory/70 via-ivory/25 to-transparent"
         }`}
       >
+        <AnnouncementBar />
+
         {/* Compact mobile top bar */}
         <div className="grid h-[68px] grid-cols-[1fr_auto_1fr] items-center border-b border-espresso/[0.06] px-3 lg:hidden">
           <button
@@ -194,9 +202,25 @@ export default function Header() {
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(232,213,208,0.45),_transparent_55%)]"
               aria-hidden
             />
-            <div className="h-[68px] shrink-0" aria-hidden />
+            <div className="h-[100px] shrink-0" aria-hidden />
 
             <nav className="relative flex flex-1 flex-col overflow-y-auto px-8 pb-28 pt-4">
+              <p className="mb-4 text-center font-sans text-[10px] uppercase tracking-[0.32em] text-espresso/40">
+                Shop By
+              </p>
+              <div className="mb-8 flex flex-col border-y border-espresso/10">
+                {SHOP_QUICK_LINKS.map((link) => (
+                  <button
+                    key={link.href}
+                    type="button"
+                    onClick={() => go(link.href)}
+                    className="border-b border-espresso/10 py-3.5 text-left font-sans text-sm tracking-wide text-espresso/65 transition-colors last:border-b-0 active:bg-blush/30"
+                  >
+                    {link.label}
+                  </button>
+                ))}
+              </div>
+
               <p className="mb-6 text-center font-sans text-[10px] uppercase tracking-[0.32em] text-espresso/40">
                 Navigate
               </p>

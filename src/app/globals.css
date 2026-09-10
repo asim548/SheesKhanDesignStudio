@@ -35,11 +35,27 @@ body.mobile-menu-open [data-mobile-tabs] {
 
 @layer components {
   .label-luxury {
-    @apply font-sans text-[13px] uppercase tracking-[0.2em] text-espresso/70;
+    @apply font-sans text-[11px] uppercase tracking-[0.22em] text-espresso/55 md:text-[12px];
   }
 
   .heading-display {
-    @apply font-serif font-light tracking-wide text-espresso;
+    @apply font-serif font-light tracking-[0.04em] text-espresso;
+  }
+
+  .badge-luxury {
+    @apply px-2.5 py-1 font-sans text-[9px] uppercase tracking-[0.2em];
+  }
+
+  .shop-now-pill {
+    @apply inline-flex items-center justify-center rounded-full border border-espresso/35
+      bg-transparent px-7 py-2.5 font-sans text-[10px] uppercase tracking-[0.22em]
+      text-espresso transition-all duration-500 ease-luxury
+      hover:border-espresso hover:bg-espresso hover:text-ivory;
+  }
+
+  .luxury-announcement {
+    @apply border-b border-espresso/10 bg-ivory/95 py-2 text-center font-sans
+      text-[9px] uppercase tracking-[0.28em] text-espresso/45 md:text-[10px];
   }
 
   .btn-primary {
@@ -81,6 +97,11 @@ body.mobile-menu-open [data-mobile-tabs] {
 
   .section-pad {
     @apply px-6 py-20 md:px-12 md:py-28 lg:px-20 lg:py-32;
+  }
+
+  /* Announcement bar (32px) + header */
+  .page-offset-header {
+    @apply pt-[100px] lg:pt-[120px];
   }
 
   .input-field {

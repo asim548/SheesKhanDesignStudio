@@ -30,7 +30,7 @@ export default function MobileBottomNav() {
   return (
     <nav
       data-mobile-tabs
-      className="fixed inset-x-0 bottom-0 z-[70] border-t border-espresso/10 bg-ivory/95 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_30px_rgba(61,43,34,0.06)] backdrop-blur-xl lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-[70] border-t border-espresso/[0.08] bg-ivory pb-[env(safe-area-inset-bottom)] shadow-[0_-4px_24px_rgba(61,43,34,0.04)] lg:hidden"
       aria-label="Mobile tabs"
     >
       <div className="grid h-[68px] grid-cols-5">
@@ -52,18 +52,19 @@ export default function MobileBottomNav() {
               key={tab.href}
               href={tab.href}
               aria-current={active ? "page" : undefined}
-              className={`relative flex min-w-0 flex-col items-center justify-center gap-1 font-sans transition-colors duration-300 ${
-                active ? "text-espresso" : "text-espresso/45"
-              }`}
+              className={`relative flex min-w-0 flex-col items-center justify-center gap-0.5 font-sans transition-colors duration-300 ${
+                active ? "text-espresso" : "text-espresso/38"
+              } ${tab.href === "/" ? "-mt-1" : ""}`}
             >
               <span
-                className={`absolute inset-x-2 top-0 h-0.5 transition-colors ${
-                  active ? "bg-blush" : "bg-transparent"
-                }`}
-              />
-              <span
-                className={`relative flex h-7 w-9 items-center justify-center rounded-full transition-colors ${
-                  active ? "bg-blush/70" : ""
+                className={`relative flex items-center justify-center transition-all duration-300 ${
+                  tab.href === "/"
+                    ? `h-11 w-11 rounded-full border ${
+                        active
+                          ? "border-espresso/20 bg-espresso text-ivory"
+                          : "border-espresso/15 bg-blush/50 text-espresso"
+                      }`
+                    : "h-7 w-9"
                 }`}
               >
                 <Icon />
@@ -73,7 +74,7 @@ export default function MobileBottomNav() {
                   </span>
                 )}
               </span>
-              <span className="truncate text-[9px] tracking-[0.04em]">
+              <span className="truncate text-[9px] uppercase tracking-[0.06em]">
                 {tab.label}
               </span>
             </Link>

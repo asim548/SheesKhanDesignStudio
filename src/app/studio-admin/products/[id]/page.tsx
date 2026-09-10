@@ -4,8 +4,14 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Image from "next/image";
 import AdminNav from "@/components/admin/AdminNav";
-import { PRODUCT_CATEGORIES, PRODUCT_SIZES } from "@/lib/constants";
+import {
+  PRODUCT_SIZES,
+  PRODUCT_SUBCATEGORIES,
+  categoryHasSubcategories,
+} from "@/lib/constants";
 import { adminFetch, uploadAdminImage } from "@/lib/prepare-image-upload";
+import { AdminPricePreview } from "@/components/admin/AdminPricePreview";
+import CategorySubcategoryFields from "@/components/admin/CategorySubcategoryFields";
 
 export default function EditProductPage() {
   const { id } = useParams<{ id: string }>();
@@ -20,6 +26,7 @@ export default function EditProductPage() {
     title: "",
     slug: "",
     category: "luxe-pret",
+    subCategory: PRODUCT_SUBCATEGORIES[0].value,
     price: "",
     sku: "",
     description: "",
@@ -51,6 +58,11 @@ export default function EditProductPage() {
           title: p.title || "",
           slug: p.slug || "",
           category: p.category || "luxe-pret",
+          subCategory:
+            p.subCategory ||
+            (categoryHasSubcategories(p.category || "luxe-pret")
+              ? PRODUCT_SUBCATEGORIES[0].value
+              : ""),
           price: String(p.price ?? ""),
           sku: p.sku || "",
           description: p.description || "",
@@ -121,7 +133,11 @@ export default function EditProductPage() {
       const res = await adminFetch(`/api/products/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, price: Number(form.price) }),
+        body: JSON.stringify({
+          ...form,
+          price: Number(form.price),
+          subCategory: form.subCategory || undefined,
+        }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -178,31 +194,22 @@ export default function EditProductPage() {
               required
             />
           </div>
-          <div className="grid gap-6 sm:grid-cols-2">
-            <div>
-              <label className="label-luxury mb-2 block">Category</label>
-              <select
-                className="input-field"
-                value={form.category}
-                onChange={(e) => set("category", e.target.value)}
-              >
-                {PRODUCT_CATEGORIES.map((c) => (
-                  <option key={c.value} value={c.value}>
-                    {c.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="label-luxury mb-2 block">Price (PKR)</label>
-              <input
-                type="number"
-                className="input-field"
-                value={form.price}
-                onChange={(e) => set("price", e.target.value)}
-                required
-              />
-            </div>
+          <CategorySubcategoryFields
+            category={form.category}
+            subCategory={form.subCategory}
+            onCategoryChange={(value) => set("category", value)}
+            onSubCategoryChange={(value) => set("subCategory", value)}
+          />
+          <div>
+            <label className="label-luxury mb-2 block">Price (PKR)</label>
+            <input
+              type="number"
+              className="input-field"
+              value={form.price}
+              onChange={(e) => set("price", e.target.value)}
+              required
+            />
+            <AdminPricePreview pkr={form.price} />
           </div>
           <div>
             <label className="label-luxury mb-2 block">Description</label>

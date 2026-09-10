@@ -52,6 +52,42 @@ export const PRODUCT_CATEGORIES = [
   { value: "luxe-pret", label: "Luxe Pret" },
 ] as const;
 
+/** Subcategories for Luxe Pret, Formals, and Semi-Formals */
+export const PRODUCT_SUBCATEGORIES = [
+  { value: "co-ords", label: "Co-ords" },
+  { value: "kaftans", label: "Kaftans" },
+  { value: "core-classics", label: "Core Classics (Shalwar Kameez)" },
+  { value: "jackets", label: "Jackets" },
+  { value: "saris", label: "Saris" },
+  { value: "lehnga-choli", label: "Lehnga Choli" },
+  { value: "angrakha", label: "Angrakha" },
+  { value: "signature-drapes", label: "Signature Drapes" },
+] as const;
+
+export const PARENT_CATEGORIES_WITH_SUBCATEGORIES = [
+  "luxe-pret",
+  "formals",
+  "semi-formals",
+] as const;
+
+export type ProductSubcategoryValue =
+  (typeof PRODUCT_SUBCATEGORIES)[number]["value"];
+
+export function categoryHasSubcategories(category: string): boolean {
+  return (PARENT_CATEGORIES_WITH_SUBCATEGORIES as readonly string[]).includes(
+    category
+  );
+}
+
+export function getSubcategoryLabel(value?: string | null): string | undefined {
+  if (!value) return undefined;
+  return PRODUCT_SUBCATEGORIES.find((s) => s.value === value)?.label;
+}
+
+export function getProductCategoryLabel(value: string): string | undefined {
+  return PRODUCT_CATEGORIES.find((c) => c.value === value)?.label;
+}
+
 export const PRODUCT_SIZES = [
   "XS",
   "S",

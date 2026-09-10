@@ -114,7 +114,7 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="pt-24">
+      <div className="page-offset-header">
         <section className="section-pad text-center">
           <h1 className="heading-display text-3xl">Your bag is empty</h1>
           <Link href="/shop" className="btn-primary mt-8 inline-flex">
@@ -126,7 +126,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="pt-24">
+    <div className="page-offset-header">
       <section className="section-pad">
         <div className="mx-auto grid max-w-5xl gap-12 lg:grid-cols-5">
           <FadeIn className="lg:col-span-3">

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="pt-24">
+    <div className="page-offset-header">
       <section className="section-pad pb-8">
         <FadeIn className="mx-auto max-w-3xl text-center">
           <p className="label-luxury mb-4">The Visionary Behind the Brand</p>

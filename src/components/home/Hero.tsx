@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import Button from "@/components/ui/Button";
 import Logo from "@/components/ui/Logo";
 import { SITE } from "@/lib/constants";
@@ -22,7 +23,7 @@ export default function Hero() {
       <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-ivory/40 via-ivory/15 to-ivory/45" />
 
       {/* Content — leave room for mobile header + bottom nav */}
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 pb-28 pt-28 text-center lg:pb-16 lg:pt-24">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 pb-28 pt-32 text-center lg:pb-16 lg:pt-36">
         <Logo
           size="lg"
           animated={false}
@@ -42,10 +43,12 @@ export default function Hero() {
           {SITE.tagline}
         </p>
 
-        <div className="mt-8 flex w-full max-w-xs flex-col gap-3 sm:mt-10 sm:max-w-none sm:flex-row sm:justify-center sm:gap-4">
-          <Button href="/collections">View Collections</Button>
-          <Button href="/custom-order" variant="outline">
-            Begin Consultation
+        <div className="mt-10 flex w-full max-w-xs flex-col items-center gap-4 sm:max-w-none sm:flex-row sm:justify-center">
+          <Link href="/shop" className="shop-now-pill border-ivory/60 bg-espresso/80 text-ivory hover:bg-ivory hover:text-espresso">
+            Shop Ready to Wear
+          </Link>
+          <Button href="/collections" variant="outline" className="!border-ivory/50 !px-8 !py-2.5 !text-[10px] !tracking-[0.22em] !text-espresso hover:!bg-ivory/90">
+            View Collections
           </Button>
         </div>
       </div>

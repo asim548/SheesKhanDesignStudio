@@ -38,6 +38,7 @@ export async function PUT(req: NextRequest, { params }: Params) {
         title: body.title,
         slug: body.slug,
         category: body.category,
+        subCategory: body.subCategory || undefined,
         price: body.price,
         currency: body.currency,
         sku: body.sku,

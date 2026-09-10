@@ -5,6 +5,10 @@ import Link from "next/link";
 import Image from "next/image";
 import AdminNav from "@/components/admin/AdminNav";
 import { formatPrice } from "@/lib/cart";
+import {
+  getProductCategoryLabel,
+  getSubcategoryLabel,
+} from "@/lib/constants";
 import { adminFetch } from "@/lib/prepare-image-upload";
 
 interface Product {
@@ -12,6 +16,7 @@ interface Product {
   title: string;
   slug: string;
   category: string;
+  subCategory?: string;
   price: number;
   currency: string;
   sku: string;
@@ -104,7 +109,11 @@ export default function AdminProductsPage() {
                 <div className="min-w-0 flex-1">
                   <p className="font-serif text-lg text-espresso">{p.title}</p>
                   <p className="font-sans text-sm text-espresso/50">
-                    {p.sku} · {formatPrice(p.price, p.currency)} · {p.status}
+                    {getProductCategoryLabel(p.category)}
+                    {p.subCategory
+                      ? ` · ${getSubcategoryLabel(p.subCategory)}`
+                      : ""}{" "}
+                    · {p.sku} · {formatPrice(p.price, p.currency)} · {p.status}
                     {p.featured ? " · Featured" : ""}
                     {!p.published ? " · Draft" : ""}
                   </p>

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import FadeIn from "@/components/ui/FadeIn";
 import SectionHeading from "@/components/ui/SectionHeading";
-import Button from "@/components/ui/Button";
 import WishlistButton from "@/components/shop/WishlistButton";
 import { DESIGN_CATEGORIES } from "@/lib/constants";
 
@@ -95,9 +94,9 @@ export default function FeaturedCollection({ designs }: FeaturedCollectionProps)
       </div>
 
       <FadeIn className="mt-14 text-center">
-        <Button href="/collections" variant="outline">
+        <Link href="/collections" className="shop-now-pill">
           Explore Full Collection
-        </Button>
+        </Link>
       </FadeIn>
     </section>
   );

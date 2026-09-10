@@ -83,13 +83,8 @@ export const useCart = create<CartState>()(
   )
 );
 
+import { formatDualPrice } from "./currency";
+
 export function formatPrice(amount: number, currency = "PKR") {
-  if (currency === "PKR") {
-    return `Rs ${amount.toLocaleString("en-PK")}`;
-  }
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 0,
-  }).format(amount);
+  return formatDualPrice(amount, currency).combined;
 }

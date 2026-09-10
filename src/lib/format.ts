@@ -1,11 +1,6 @@
 /** Server-safe price formatter (cart has a client twin) */
+import { formatDualPrice } from "./currency";
+
 export function formatPriceStatic(amount: number, currency = "PKR") {
-  if (currency === "PKR") {
-    return `Rs ${amount.toLocaleString("en-PK")}`;
-  }
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 0,
-  }).format(amount);
+  return formatDualPrice(amount, currency).combined;
 }

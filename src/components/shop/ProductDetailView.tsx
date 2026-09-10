@@ -5,8 +5,11 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import FadeIn from "@/components/ui/FadeIn";
 import ProductPurchasePanel from "@/components/shop/ProductPurchasePanel";
-import { PRODUCT_CATEGORIES } from "@/lib/constants";
-import { formatPriceStatic } from "@/lib/format";
+import {
+  PRODUCT_CATEGORIES,
+  getSubcategoryLabel,
+} from "@/lib/constants";
+import PriceDisplay from "@/components/shop/PriceDisplay";
 import type { IProduct } from "@/models/Product";
 
 export default function ProductDetailView({ product }: { product: IProduct }) {
@@ -37,7 +40,7 @@ export default function ProductDetailView({ product }: { product: IProduct }) {
   }, [images.length, lightbox]);
 
   return (
-    <div className="pt-24">
+    <div className="page-offset-header">
       <section className="section-pad pt-8 md:pt-12">
         <div className="mx-auto grid max-w-6xl items-start gap-10 lg:grid-cols-2 lg:gap-14">
           {/* Gallery — constrained, not full-bleed */}
@@ -115,13 +118,25 @@ export default function ProductDetailView({ product }: { product: IProduct }) {
 
           {/* Details beside image */}
           <FadeIn delay={0.1} className="lg:pt-4">
-            <p className="label-luxury mb-2">{cat?.label}</p>
+            <p className="label-luxury mb-2">
+              {cat?.label}
+              {product.subCategory && (
+                <span className="text-espresso/45">
+                  {" "}
+                  · {getSubcategoryLabel(product.subCategory)}
+                </span>
+              )}
+            </p>
             <h1 className="heading-display text-3xl md:text-4xl lg:text-5xl">
               {product.title}
             </h1>
-            <p className="mt-4 font-sans text-xl text-espresso">
-              {formatPriceStatic(product.price, product.currency)}
-            </p>
+            <PriceDisplay
+              amount={product.price}
+              currency={product.currency}
+              layout="stacked"
+              className="mt-4 font-sans text-xl text-espresso"
+              secondaryClassName="text-espresso/45 font-sans text-base"
+            />
             <p className="mt-2 font-sans text-xs tracking-wide text-espresso/40">
               SKU / Design Code: {product.sku}
             </p>

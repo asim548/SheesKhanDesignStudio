@@ -6,8 +6,11 @@ import FadeIn from "@/components/ui/FadeIn";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Button from "@/components/ui/Button";
 import WishlistButton from "@/components/shop/WishlistButton";
-import { PRODUCT_CATEGORIES } from "@/lib/constants";
-import { formatPrice } from "@/lib/cart";
+import {
+  PRODUCT_CATEGORIES,
+  getSubcategoryLabel,
+} from "@/lib/constants";
+import PriceDisplay from "@/components/shop/PriceDisplay";
 import type { IProduct } from "@/models/Product";
 
 export default function FeaturedReadyToWear({
@@ -43,13 +46,24 @@ export default function FeaturedReadyToWear({
                       />
                     )}
                   </div>
-                  <p className="mt-5 label-luxury">{cat?.label}</p>
+                  <p className="mt-5 label-luxury">
+                    {cat?.label}
+                    {product.subCategory && (
+                      <span className="text-espresso/45">
+                        {" "}
+                        · {getSubcategoryLabel(product.subCategory)}
+                      </span>
+                    )}
+                  </p>
                   <h3 className="mt-1 font-serif text-2xl font-light tracking-wide text-espresso">
                     {product.title.toUpperCase()}
                   </h3>
-                  <p className="mt-2 font-sans text-sm text-espresso/55">
-                    {formatPrice(product.price, product.currency)}
-                  </p>
+                  <PriceDisplay
+                    amount={product.price}
+                    currency={product.currency}
+                    layout="stacked"
+                    className="mt-2 font-sans text-sm text-espresso/55"
+                  />
                 </Link>
                 <WishlistButton
                   className="absolute right-3 top-3 z-20 h-10 w-10 bg-ivory/90 backdrop-blur-sm hover:bg-blush"

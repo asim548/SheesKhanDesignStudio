@@ -32,7 +32,7 @@ export default async function DesignDetailPage({ params }: Props) {
   const cat = DESIGN_CATEGORIES.find((c) => c.value === design.category);
 
   return (
-    <div className="pt-24">
+    <div className="page-offset-header">
       {/* Full-width gallery */}
       <section className="relative">
         <div className="grid md:grid-cols-2">
