@@ -2,7 +2,6 @@ import Hero from "@/components/home/Hero";
 import FeaturedCollection from "@/components/home/FeaturedCollection";
 import NewArrivalsSection from "@/components/home/NewArrivalsSection";
 import ShopCategoryHeroes from "@/components/home/ShopCategoryHeroes";
-import SubcategoryShowcase from "@/components/home/SubcategoryShowcase";
 import BridalStatement from "@/components/home/BridalStatement";
 import CustomJourneyCTA from "@/components/home/CustomJourneyCTA";
 import { getDesigns, getProducts } from "@/lib/data";
@@ -33,7 +32,6 @@ export default async function HomePage() {
         productsByCategory={productsByCategory}
       />
       <ShopCategoryHeroes productsByCategory={productsByCategory} />
-      <SubcategoryShowcase />
       <BridalStatement />
       <FeaturedCollection designs={featured} />
       <CustomJourneyCTA />

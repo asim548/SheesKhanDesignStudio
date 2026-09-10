@@ -22,12 +22,12 @@ export default function ShopCategoryBanner({
 
   return (
     <div className="relative -mx-6 mb-12 overflow-hidden md:-mx-12 lg:-mx-20">
-      <div className="relative aspect-[5/3] md:aspect-[21/8]">
+      <div className="relative aspect-[4/5] overflow-hidden sm:aspect-[16/10] lg:aspect-[2/1] lg:max-h-[720px]">
         <Image
           src={image}
           alt={alt}
           fill
-          className="object-cover"
+          className="object-cover object-[center_22%] md:object-[center_28%]"
           sizes="100vw"
           priority
         />

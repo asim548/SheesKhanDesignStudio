@@ -32,7 +32,7 @@ export default function ProductCard({
               alt={product.images[0].alt || product.title}
               fill
               priority={priority}
-              className="object-cover transition-transform duration-[1.4s] ease-luxury group-hover:scale-[1.04]"
+              className="object-cover object-top transition-transform duration-[1.4s] ease-luxury group-hover:scale-[1.04]"
               sizes="(max-width: 768px) 50vw, 33vw"
             />
           )}

@@ -58,12 +58,12 @@ export default function ShopCategoryHeroes({ productsByCategory }: Props) {
             <FadeIn key={block.value} delay={i * 0.08}>
               <article className="group relative">
                 <Link href={block.href} className="block">
-                  <div className="relative aspect-[4/5] overflow-hidden md:aspect-[21/9]">
+                  <div className="relative aspect-[4/5] overflow-hidden md:aspect-[16/10] lg:aspect-[2/1] lg:max-h-[780px]">
                     <Image
                       src={cover}
                       alt={alt}
                       fill
-                      className="object-cover transition-transform duration-[1.6s] ease-luxury group-hover:scale-[1.03]"
+                      className="object-cover object-[center_22%] transition-transform duration-[1.6s] ease-luxury group-hover:scale-[1.03] md:object-[center_28%]"
                       sizes="100vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-espresso/55 via-espresso/10 to-transparent" />
