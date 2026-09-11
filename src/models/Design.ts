@@ -8,6 +8,9 @@ export interface IDesign {
   description: string;
   fabricDetails: string;
   color?: string;
+  estimatedDelivery?: string;
+  customMeasurements?: string;
+  colorCustomization?: string;
   embellishmentDetails?: string;
   images: { url: string; publicId?: string; alt?: string }[];
   featured: boolean;
@@ -28,6 +31,9 @@ const DesignSchema = new Schema<IDesign>(
     description: { type: String, required: true },
     fabricDetails: { type: String, required: true },
     color: { type: String },
+    estimatedDelivery: { type: String },
+    customMeasurements: { type: String },
+    colorCustomization: { type: String },
     embellishmentDetails: { type: String },
     images: [
       {

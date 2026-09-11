@@ -6,6 +6,7 @@ import Image from "next/image";
 import AdminNav from "@/components/admin/AdminNav";
 import { DESIGN_CATEGORIES } from "@/lib/constants";
 import { adminFetch, uploadAdminImage } from "@/lib/prepare-image-upload";
+import DesignExtraFields from "@/components/admin/DesignExtraFields";
 
 export default function NewDesignPage() {
   const router = useRouter();
@@ -19,7 +20,9 @@ export default function NewDesignPage() {
     category: "bridal",
     description: "",
     fabricDetails: "",
-    color: "",
+    estimatedDelivery: "",
+    customMeasurements: "",
+    colorCustomization: "",
     embellishmentDetails: "",
     featured: false,
     published: true,
@@ -65,7 +68,10 @@ export default function NewDesignPage() {
       const res = await adminFetch("/api/designs", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          color: form.colorCustomization || undefined,
+        }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -124,14 +130,12 @@ export default function NewDesignPage() {
               required
             />
           </Field>
-          <Field label="Color">
-            <input
-              className="input-field"
-              value={form.color}
-              onChange={(e) => set("color", e.target.value)}
-              placeholder="e.g. Rose Gold, Ivory"
-            />
-          </Field>
+          <DesignExtraFields
+            estimatedDelivery={form.estimatedDelivery}
+            customMeasurements={form.customMeasurements}
+            colorCustomization={form.colorCustomization}
+            onChange={set}
+          />
           <Field label="Embellishment Details">
             <input
               className="input-field"

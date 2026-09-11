@@ -6,6 +6,7 @@ import Image from "next/image";
 import AdminNav from "@/components/admin/AdminNav";
 import { DESIGN_CATEGORIES } from "@/lib/constants";
 import { adminFetch, uploadAdminImage } from "@/lib/prepare-image-upload";
+import DesignExtraFields from "@/components/admin/DesignExtraFields";
 
 export default function EditDesignPage() {
   const { id } = useParams<{ id: string }>();
@@ -21,7 +22,9 @@ export default function EditDesignPage() {
     category: "bridal",
     description: "",
     fabricDetails: "",
-    color: "",
+    estimatedDelivery: "",
+    customMeasurements: "",
+    colorCustomization: "",
     embellishmentDetails: "",
     featured: false,
     published: true,
@@ -38,7 +41,9 @@ export default function EditDesignPage() {
           category: d.category || "bridal",
           description: d.description || "",
           fabricDetails: d.fabricDetails || "",
-          color: d.color || "",
+          estimatedDelivery: d.estimatedDelivery || "",
+          customMeasurements: d.customMeasurements || "",
+          colorCustomization: d.colorCustomization || d.color || "",
           embellishmentDetails: d.embellishmentDetails || "",
           featured: !!d.featured,
           published: d.published !== false,
@@ -85,7 +90,10 @@ export default function EditDesignPage() {
       const res = await adminFetch(`/api/designs/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          color: form.colorCustomization || undefined,
+        }),
       });
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
@@ -157,15 +165,12 @@ export default function EditDesignPage() {
               required
             />
           </div>
-          <div>
-            <label className="label-luxury mb-2 block">Color</label>
-            <input
-              className="input-field"
-              value={form.color}
-              onChange={(e) => set("color", e.target.value)}
-              placeholder="e.g. Rose Gold, Ivory"
-            />
-          </div>
+          <DesignExtraFields
+            estimatedDelivery={form.estimatedDelivery}
+            customMeasurements={form.customMeasurements}
+            colorCustomization={form.colorCustomization}
+            onChange={set}
+          />
           <div>
             <label className="label-luxury mb-2 block">Embellishment</label>
             <input

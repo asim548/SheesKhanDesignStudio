@@ -76,11 +76,27 @@ export default async function DesignDetailPage({ params }: Props) {
                   {design.fabricDetails}
                 </p>
               </div>
-              {design.color && (
+              {design.estimatedDelivery && (
                 <div>
-                  <p className="label-luxury mb-2">Color</p>
-                  <p className="font-sans text-base text-espresso/80">
-                    {design.color}
+                  <p className="label-luxury mb-2">Estimated Delivery</p>
+                  <p className="font-sans text-base text-espresso/80 whitespace-pre-line">
+                    {design.estimatedDelivery}
+                  </p>
+                </div>
+              )}
+              {design.customMeasurements && (
+                <div>
+                  <p className="label-luxury mb-2">Custom Measurements / Size</p>
+                  <p className="font-sans text-base text-espresso/80 whitespace-pre-line">
+                    {design.customMeasurements}
+                  </p>
+                </div>
+              )}
+              {(design.colorCustomization || design.color) && (
+                <div>
+                  <p className="label-luxury mb-2">Color Customization</p>
+                  <p className="font-sans text-base text-espresso/80 whitespace-pre-line">
+                    {design.colorCustomization || design.color}
                   </p>
                 </div>
               )}
