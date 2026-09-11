@@ -19,6 +19,7 @@ export default function NewDesignPage() {
     category: "bridal",
     description: "",
     fabricDetails: "",
+    color: "",
     embellishmentDetails: "",
     featured: false,
     published: true,
@@ -121,6 +122,14 @@ export default function NewDesignPage() {
               value={form.fabricDetails}
               onChange={(e) => set("fabricDetails", e.target.value)}
               required
+            />
+          </Field>
+          <Field label="Color">
+            <input
+              className="input-field"
+              value={form.color}
+              onChange={(e) => set("color", e.target.value)}
+              placeholder="e.g. Rose Gold, Ivory"
             />
           </Field>
           <Field label="Embellishment Details">

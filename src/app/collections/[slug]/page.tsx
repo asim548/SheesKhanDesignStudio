@@ -76,6 +76,14 @@ export default async function DesignDetailPage({ params }: Props) {
                   {design.fabricDetails}
                 </p>
               </div>
+              {design.color && (
+                <div>
+                  <p className="label-luxury mb-2">Color</p>
+                  <p className="font-sans text-base text-espresso/80">
+                    {design.color}
+                  </p>
+                </div>
+              )}
               {design.embellishmentDetails && (
                 <div>
                   <p className="label-luxury mb-2">Embellishment</p>

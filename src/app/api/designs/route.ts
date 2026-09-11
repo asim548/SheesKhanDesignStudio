@@ -54,6 +54,7 @@ export async function POST(req: NextRequest) {
       category: body.category,
       description: body.description,
       fabricDetails: body.fabricDetails,
+      color: body.color || undefined,
       embellishmentDetails: body.embellishmentDetails,
       images: body.images || [],
       featured: body.featured || false,

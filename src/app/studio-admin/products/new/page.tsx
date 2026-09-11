@@ -8,6 +8,7 @@ import { PRODUCT_SIZES, PRODUCT_SUBCATEGORIES } from "@/lib/constants";
 import { adminFetch, uploadAdminImage } from "@/lib/prepare-image-upload";
 import { AdminPricePreview } from "@/components/admin/AdminPricePreview";
 import CategorySubcategoryFields from "@/components/admin/CategorySubcategoryFields";
+import ProductExtraFields from "@/components/admin/ProductExtraFields";
 
 const defaultSizes = PRODUCT_SIZES.map((label) => ({
   label,
@@ -30,6 +31,10 @@ export default function NewProductPage() {
     sku: "",
     description: "",
     fabricDetails: "",
+    color: "",
+    workDetails: "",
+    disclaimer: "",
+    careInstructions: "",
     deliveryNote: "Delivery 3–4 weeks",
     featured: false,
     published: true,
@@ -163,6 +168,13 @@ export default function NewProductPage() {
               onChange={(e) => set("fabricDetails", e.target.value)}
             />
           </Field>
+          <ProductExtraFields
+            color={form.color}
+            workDetails={form.workDetails}
+            disclaimer={form.disclaimer}
+            careInstructions={form.careInstructions}
+            onChange={set}
+          />
           <Field label="Delivery Note">
             <input
               className="input-field"

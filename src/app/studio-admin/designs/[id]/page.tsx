@@ -21,6 +21,7 @@ export default function EditDesignPage() {
     category: "bridal",
     description: "",
     fabricDetails: "",
+    color: "",
     embellishmentDetails: "",
     featured: false,
     published: true,
@@ -37,6 +38,7 @@ export default function EditDesignPage() {
           category: d.category || "bridal",
           description: d.description || "",
           fabricDetails: d.fabricDetails || "",
+          color: d.color || "",
           embellishmentDetails: d.embellishmentDetails || "",
           featured: !!d.featured,
           published: d.published !== false,
@@ -153,6 +155,15 @@ export default function EditDesignPage() {
               value={form.fabricDetails}
               onChange={(e) => set("fabricDetails", e.target.value)}
               required
+            />
+          </div>
+          <div>
+            <label className="label-luxury mb-2 block">Color</label>
+            <input
+              className="input-field"
+              value={form.color}
+              onChange={(e) => set("color", e.target.value)}
+              placeholder="e.g. Rose Gold, Ivory"
             />
           </div>
           <div>

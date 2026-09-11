@@ -74,12 +74,24 @@ export default function ProductPurchasePanel({ product }: { product: IProduct })
         </div>
       </div>
 
-      {product.fabricDetails && (
-        <div>
-          <p className="label-luxury mb-2">Fabric</p>
-          <span className="inline-block bg-espresso px-4 py-2 font-sans text-[11px] uppercase tracking-[0.16em] text-ivory">
-            {product.fabricDetails}
-          </span>
+      {(product.fabricDetails || product.color) && (
+        <div className="flex flex-wrap gap-6">
+          {product.color && (
+            <div>
+              <p className="label-luxury mb-2">Color</p>
+              <span className="inline-block border border-espresso/20 px-4 py-2 font-sans text-[11px] uppercase tracking-[0.16em] text-espresso">
+                {product.color}
+              </span>
+            </div>
+          )}
+          {product.fabricDetails && (
+            <div>
+              <p className="label-luxury mb-2">Fabric</p>
+              <span className="inline-block bg-espresso px-4 py-2 font-sans text-[11px] uppercase tracking-[0.16em] text-ivory">
+                {product.fabricDetails}
+              </span>
+            </div>
+          )}
         </div>
       )}
 

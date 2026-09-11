@@ -29,6 +29,10 @@ export interface IProduct {
   sku: string;
   description: string;
   fabricDetails?: string;
+  color?: string;
+  workDetails?: string;
+  disclaimer?: string;
+  careInstructions?: string;
   sizes: IProductSize[];
   images: { url: string; publicId?: string; alt?: string }[];
   deliveryNote: string;
@@ -66,6 +70,10 @@ const ProductSchema = new Schema<IProduct>(
     sku: { type: String, required: true },
     description: { type: String, required: true },
     fabricDetails: { type: String },
+    color: { type: String },
+    workDetails: { type: String },
+    disclaimer: { type: String },
+    careInstructions: { type: String },
     sizes: [
       {
         label: { type: String, required: true },

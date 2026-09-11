@@ -7,6 +7,7 @@ export interface IDesign {
   category: "bridal" | "formals" | "semi-formals";
   description: string;
   fabricDetails: string;
+  color?: string;
   embellishmentDetails?: string;
   images: { url: string; publicId?: string; alt?: string }[];
   featured: boolean;
@@ -26,6 +27,7 @@ const DesignSchema = new Schema<IDesign>(
     },
     description: { type: String, required: true },
     fabricDetails: { type: String, required: true },
+    color: { type: String },
     embellishmentDetails: { type: String },
     images: [
       {

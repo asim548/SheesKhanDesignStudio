@@ -12,6 +12,7 @@ import {
 import { adminFetch, uploadAdminImage } from "@/lib/prepare-image-upload";
 import { AdminPricePreview } from "@/components/admin/AdminPricePreview";
 import CategorySubcategoryFields from "@/components/admin/CategorySubcategoryFields";
+import ProductExtraFields from "@/components/admin/ProductExtraFields";
 
 export default function EditProductPage() {
   const { id } = useParams<{ id: string }>();
@@ -31,6 +32,10 @@ export default function EditProductPage() {
     sku: "",
     description: "",
     fabricDetails: "",
+    color: "",
+    workDetails: "",
+    disclaimer: "",
+    careInstructions: "",
     deliveryNote: "",
     featured: false,
     published: true,
@@ -67,6 +72,10 @@ export default function EditProductPage() {
           sku: p.sku || "",
           description: p.description || "",
           fabricDetails: p.fabricDetails || "",
+          color: p.color || "",
+          workDetails: p.workDetails || "",
+          disclaimer: p.disclaimer || "",
+          careInstructions: p.careInstructions || "",
           deliveryNote: p.deliveryNote || "",
           featured: !!p.featured,
           published: p.published !== false,
@@ -228,6 +237,13 @@ export default function EditProductPage() {
               onChange={(e) => set("fabricDetails", e.target.value)}
             />
           </div>
+          <ProductExtraFields
+            color={form.color}
+            workDetails={form.workDetails}
+            disclaimer={form.disclaimer}
+            careInstructions={form.careInstructions}
+            onChange={set}
+          />
           <div>
             <label className="label-luxury mb-2 block">Delivery Note</label>
             <input

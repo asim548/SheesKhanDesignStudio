@@ -5,6 +5,7 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import FadeIn from "@/components/ui/FadeIn";
 import ProductPurchasePanel from "@/components/shop/ProductPurchasePanel";
+import ProductDetailSections from "@/components/shop/ProductDetailSections";
 import {
   PRODUCT_CATEGORIES,
   getSubcategoryLabel,
@@ -148,10 +149,12 @@ export default function ProductDetailView({ product }: { product: IProduct }) {
 
             <div className="mt-12 border-t border-espresso/10 pt-8">
               <p className="label-luxury mb-4">Description</p>
-              <p className="font-sans text-base leading-[1.9] text-espresso/75">
+              <p className="font-sans text-base leading-[1.9] text-espresso/75 whitespace-pre-line">
                 {product.description}
               </p>
             </div>
+
+            <ProductDetailSections product={product} />
           </FadeIn>
         </div>
       </section>
