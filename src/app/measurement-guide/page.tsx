@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import FadeIn from "@/components/ui/FadeIn";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Button from "@/components/ui/Button";
+import SizeChartSection from "@/components/shop/SizeChartSection";
 
 export const metadata: Metadata = {
   title: "Measurement Guide",
@@ -65,6 +66,8 @@ export default function MeasurementGuidePage() {
             </FadeIn>
           ))}
         </div>
+
+        <SizeChartSection className="mx-auto mt-20 max-w-3xl" />
 
         <FadeIn delay={0.3} className="mx-auto mt-16 max-w-2xl text-center">
           <div className="bg-blush/40 px-8 py-10">

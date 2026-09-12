@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart, formatPrice } from "@/lib/cart";
 import { SITE } from "@/lib/constants";
+import SizeChartTrigger from "@/components/shop/SizeChartTrigger";
 import WishlistButton from "@/components/shop/WishlistButton";
 import type { IProduct } from "@/models/Product";
 
@@ -46,12 +46,7 @@ export default function ProductPurchasePanel({ product }: { product: IProduct })
       <div>
         <div className="mb-3 flex items-center justify-between">
           <p className="label-luxury">Size</p>
-          <Link
-            href="/measurement-guide"
-            className="font-sans text-[11px] uppercase tracking-[0.16em] text-espresso/50 underline-offset-4 hover:text-espresso hover:underline"
-          >
-            Size Chart
-          </Link>
+          <SizeChartTrigger />
         </div>
         <div className="flex flex-wrap gap-2">
           {product.sizes.map((s) => (
