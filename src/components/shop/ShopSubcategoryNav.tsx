@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import {
-  PRODUCT_SUBCATEGORIES,
   categoryHasSubcategories,
   getProductCategoryLabel,
+  getSubcategoriesForCategory,
   getSubcategoryLabel,
 } from "@/lib/constants";
 
@@ -28,7 +28,8 @@ export default function ShopSubcategoryNav({
     : "All";
 
   const baseHref = `/shop?category=${category}`;
-  const subLinks = PRODUCT_SUBCATEGORIES.map((sub) => ({
+  const subcategories = getSubcategoriesForCategory(category);
+  const subLinks = subcategories.map((sub) => ({
     ...sub,
     href: `${baseHref}&subcategory=${sub.value}`,
     active: activeSubcategory === sub.value,

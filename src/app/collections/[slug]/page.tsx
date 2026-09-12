@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import FadeIn from "@/components/ui/FadeIn";
 import Button from "@/components/ui/Button";
+import PriceDisplay from "@/components/shop/PriceDisplay";
 import WishlistButton from "@/components/shop/WishlistButton";
 import { getDesignBySlug, getDesigns } from "@/lib/data";
 import { DESIGN_CATEGORIES } from "@/lib/constants";
@@ -60,6 +61,19 @@ export default async function DesignDetailPage({ params }: Props) {
           <FadeIn>
             <p className="label-luxury mb-3">{cat?.label}</p>
             <h1 className="heading-display text-4xl md:text-5xl">{design.title}</h1>
+            {typeof design.price === "number" && design.price > 0 ? (
+              <PriceDisplay
+                amount={design.price}
+                currency={design.currency || "PKR"}
+                layout="stacked"
+                className="mt-4 font-sans text-lg text-espresso"
+                secondaryClassName="text-espresso/45 font-sans text-sm"
+              />
+            ) : (
+              <p className="mt-4 font-sans text-sm uppercase tracking-[0.16em] text-espresso/50">
+                Price on enquiry
+              </p>
+            )}
           </FadeIn>
 
           <FadeIn delay={0.15}>

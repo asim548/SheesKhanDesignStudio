@@ -6,6 +6,8 @@ export interface IDesign {
   slug: string;
   category: "bridal" | "formals" | "semi-formals";
   description: string;
+  price?: number;
+  currency?: string;
   fabricDetails: string;
   color?: string;
   estimatedDelivery?: string;
@@ -29,6 +31,8 @@ const DesignSchema = new Schema<IDesign>(
       required: true,
     },
     description: { type: String, required: true },
+    price: { type: Number },
+    currency: { type: String, default: "PKR" },
     fabricDetails: { type: String, required: true },
     color: { type: String },
     estimatedDelivery: { type: String },

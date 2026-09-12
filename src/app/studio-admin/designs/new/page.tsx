@@ -7,6 +7,7 @@ import AdminNav from "@/components/admin/AdminNav";
 import { DESIGN_CATEGORIES } from "@/lib/constants";
 import { adminFetch, uploadAdminImage } from "@/lib/prepare-image-upload";
 import DesignExtraFields from "@/components/admin/DesignExtraFields";
+import { AdminPricePreview } from "@/components/admin/AdminPricePreview";
 
 export default function NewDesignPage() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function NewDesignPage() {
     title: "",
     category: "bridal",
     description: "",
+    price: "",
     fabricDetails: "",
     estimatedDelivery: "",
     customMeasurements: "",
@@ -70,6 +72,7 @@ export default function NewDesignPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          price: form.price ? Number(form.price) : undefined,
           color: form.colorCustomization || undefined,
         }),
       });
@@ -121,6 +124,17 @@ export default function NewDesignPage() {
               onChange={(e) => set("description", e.target.value)}
               required
             />
+          </Field>
+          <Field label="Price (PKR) — optional">
+            <input
+              type="number"
+              className="input-field"
+              value={form.price}
+              onChange={(e) => set("price", e.target.value)}
+              min={0}
+              placeholder="Leave blank to show Enquire only"
+            />
+            <AdminPricePreview pkr={form.price} />
           </Field>
           <Field label="Fabric Details">
             <input

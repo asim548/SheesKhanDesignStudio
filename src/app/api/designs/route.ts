@@ -53,6 +53,11 @@ export async function POST(req: NextRequest) {
       slug,
       category: body.category,
       description: body.description,
+      price:
+        body.price !== undefined && body.price !== "" && body.price !== null
+          ? Number(body.price)
+          : undefined,
+      currency: body.currency || "PKR",
       fabricDetails: body.fabricDetails,
       color: body.colorCustomization || body.color || undefined,
       estimatedDelivery: body.estimatedDelivery || undefined,

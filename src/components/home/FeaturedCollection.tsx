@@ -7,6 +7,7 @@ import FadeIn from "@/components/ui/FadeIn";
 import SectionHeading from "@/components/ui/SectionHeading";
 import WishlistButton from "@/components/shop/WishlistButton";
 import { DESIGN_CATEGORIES } from "@/lib/constants";
+import PriceDisplay from "@/components/shop/PriceDisplay";
 
 export interface FeaturedDesign {
   _id: string;
@@ -14,6 +15,8 @@ export interface FeaturedDesign {
   slug: string;
   category: string;
   fabricDetails: string;
+  price?: number;
+  currency?: string;
   images: { url: string; alt?: string }[];
 }
 
@@ -29,7 +32,7 @@ export default function FeaturedCollection({ designs }: FeaturedCollectionProps)
       <SectionHeading
         label="Bespoke Couture"
         title="Signature Pieces"
-        subtitle="A glimpse into our bridal and formal archive — each piece made to order. No prices — enquire to customize."
+        subtitle="A glimpse into our bridal and formal archive — each piece made to order. Enquire to customize."
       />
 
       <div className="mx-auto mt-16 grid max-w-6xl gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
@@ -85,6 +88,14 @@ export default function FeaturedCollection({ designs }: FeaturedCollectionProps)
                   <h3 className="mt-2 font-serif text-2xl font-light text-espresso transition-colors duration-luxury group-hover:text-espresso/80">
                     {design.title}
                   </h3>
+                  {typeof design.price === "number" && design.price > 0 ? (
+                    <PriceDisplay
+                      amount={design.price}
+                      currency={design.currency || "PKR"}
+                      layout="stacked"
+                      className="mt-2 font-sans text-sm text-espresso/55"
+                    />
+                  ) : null}
                   <span className="mt-2 block h-px w-0 bg-espresso/40 transition-all duration-luxury ease-luxury group-hover:w-16" />
                 </Link>
               </motion.div>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import AdminNav from "@/components/admin/AdminNav";
+import { formatPrice } from "@/lib/cart";
 import { adminFetch } from "@/lib/prepare-image-upload";
 
 interface Design {
@@ -11,6 +12,8 @@ interface Design {
   title: string;
   slug: string;
   category: string;
+  price?: number;
+  currency?: string;
   featured: boolean;
   published: boolean;
   images: { url: string }[];
@@ -100,6 +103,9 @@ export default function AdminDesignsPage() {
                   <p className="font-serif text-lg text-espresso">{d.title}</p>
                   <p className="font-sans text-sm text-espresso/50">
                     {d.category}
+                    {typeof d.price === "number" && d.price > 0
+                      ? ` · ${formatPrice(d.price, d.currency || "PKR")}`
+                      : " · Enquire"}
                     {d.featured ? " · Featured" : ""}
                     {!d.published ? " · Draft" : ""}
                   </p>

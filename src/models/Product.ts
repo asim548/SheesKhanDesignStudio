@@ -9,7 +9,8 @@ export type ProductSubcategory =
   | "saris"
   | "lehnga-choli"
   | "angrakha"
-  | "signature-drapes";
+  | "signature-drapes"
+  | "light-lux";
 export type ProductStatus = "in-stock" | "sold-out";
 
 export interface IProductSize {
@@ -63,6 +64,7 @@ const ProductSchema = new Schema<IProduct>(
         "lehnga-choli",
         "angrakha",
         "signature-drapes",
+        "light-lux",
       ],
     },
     price: { type: Number, required: true },

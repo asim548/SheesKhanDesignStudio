@@ -64,6 +64,11 @@ export const PRODUCT_SUBCATEGORIES = [
   { value: "signature-drapes", label: "Signature Drapes" },
 ] as const;
 
+/** Extra subcategories for Luxe Pret only */
+export const LUXE_PRET_EXTRA_SUBCATEGORIES = [
+  { value: "light-lux", label: "Light Lux" },
+] as const;
+
 export const PARENT_CATEGORIES_WITH_SUBCATEGORIES = [
   "luxe-pret",
   "formals",
@@ -79,9 +84,20 @@ export function categoryHasSubcategories(category: string): boolean {
   );
 }
 
+export function getSubcategoriesForCategory(category: string) {
+  if (category === "luxe-pret") {
+    return [...PRODUCT_SUBCATEGORIES, ...LUXE_PRET_EXTRA_SUBCATEGORIES];
+  }
+  if (categoryHasSubcategories(category)) {
+    return [...PRODUCT_SUBCATEGORIES];
+  }
+  return [];
+}
+
 export function getSubcategoryLabel(value?: string | null): string | undefined {
   if (!value) return undefined;
-  return PRODUCT_SUBCATEGORIES.find((s) => s.value === value)?.label;
+  const all = [...PRODUCT_SUBCATEGORIES, ...LUXE_PRET_EXTRA_SUBCATEGORIES];
+  return all.find((s) => s.value === value)?.label;
 }
 
 export function getProductCategoryLabel(value: string): string | undefined {

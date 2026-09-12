@@ -2,8 +2,8 @@
 
 import {
   PRODUCT_CATEGORIES,
-  PRODUCT_SUBCATEGORIES,
   categoryHasSubcategories,
+  getSubcategoriesForCategory,
 } from "@/lib/constants";
 
 interface Props {
@@ -24,14 +24,19 @@ export default function CategorySubcategoryFields({
   subCategoryLabel = "Subcategory",
 }: Props) {
   const showSubcategories = categoryHasSubcategories(category);
+  const subcategories = getSubcategoriesForCategory(category);
 
   const handleCategoryChange = (next: string) => {
     onCategoryChange(next);
     if (!categoryHasSubcategories(next)) {
       onSubCategoryChange("");
-    } else if (!subCategory) {
-      onSubCategoryChange(PRODUCT_SUBCATEGORIES[0].value);
+      return;
     }
+    const nextSubs = getSubcategoriesForCategory(next);
+    const stillValid = nextSubs.some((s) => s.value === subCategory);
+    onSubCategoryChange(
+      stillValid ? subCategory : nextSubs[0]?.value || ""
+    );
   };
 
   return (
@@ -60,7 +65,7 @@ export default function CategorySubcategoryFields({
               onChange={(e) => onSubCategoryChange(e.target.value)}
               required
             >
-              {PRODUCT_SUBCATEGORIES.map((s) => (
+              {subcategories.map((s) => (
                 <option key={s.value} value={s.value}>
                   {s.label}
                 </option>
@@ -68,7 +73,7 @@ export default function CategorySubcategoryFields({
             </select>
             <p className="mt-2 font-sans text-xs text-espresso/45">
               Product appears under {PRODUCT_CATEGORIES.find((c) => c.value === category)?.label} →{" "}
-              {PRODUCT_SUBCATEGORIES.find((s) => s.value === subCategory)?.label}
+              {subcategories.find((s) => s.value === subCategory)?.label}
             </p>
           </>
         ) : (

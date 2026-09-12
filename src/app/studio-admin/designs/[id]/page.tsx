@@ -7,6 +7,7 @@ import AdminNav from "@/components/admin/AdminNav";
 import { DESIGN_CATEGORIES } from "@/lib/constants";
 import { adminFetch, uploadAdminImage } from "@/lib/prepare-image-upload";
 import DesignExtraFields from "@/components/admin/DesignExtraFields";
+import { AdminPricePreview } from "@/components/admin/AdminPricePreview";
 
 export default function EditDesignPage() {
   const { id } = useParams<{ id: string }>();
@@ -21,6 +22,7 @@ export default function EditDesignPage() {
     title: "",
     category: "bridal",
     description: "",
+    price: "",
     fabricDetails: "",
     estimatedDelivery: "",
     customMeasurements: "",
@@ -40,6 +42,7 @@ export default function EditDesignPage() {
           title: d.title || "",
           category: d.category || "bridal",
           description: d.description || "",
+          price: d.price != null ? String(d.price) : "",
           fabricDetails: d.fabricDetails || "",
           estimatedDelivery: d.estimatedDelivery || "",
           customMeasurements: d.customMeasurements || "",
@@ -92,6 +95,7 @@ export default function EditDesignPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...form,
+          price: form.price ? Number(form.price) : undefined,
           color: form.colorCustomization || undefined,
         }),
       });
@@ -155,6 +159,18 @@ export default function EditDesignPage() {
               onChange={(e) => set("description", e.target.value)}
               required
             />
+          </div>
+          <div>
+            <label className="label-luxury mb-2 block">Price (PKR) — optional</label>
+            <input
+              type="number"
+              className="input-field"
+              value={form.price}
+              onChange={(e) => set("price", e.target.value)}
+              min={0}
+              placeholder="Leave blank to show Enquire only"
+            />
+            <AdminPricePreview pkr={form.price} />
           </div>
           <div>
             <label className="label-luxury mb-2 block">Fabric Details</label>
