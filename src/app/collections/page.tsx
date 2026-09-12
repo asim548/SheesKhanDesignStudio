@@ -4,6 +4,7 @@ import Link from "next/link";
 import FadeIn from "@/components/ui/FadeIn";
 import SectionHeading from "@/components/ui/SectionHeading";
 import WishlistButton from "@/components/shop/WishlistButton";
+import SizeChartTrigger from "@/components/shop/SizeChartTrigger";
 import { getDesigns } from "@/lib/data";
 import { DESIGN_CATEGORIES } from "@/lib/constants";
 
@@ -31,6 +32,10 @@ export default async function CollectionsPage({ searchParams }: Props) {
           title="Collections"
           subtitle="Browse sample designs as inspiration for your made-to-order piece."
         />
+
+        <FadeIn delay={0.1} className="mt-6 flex justify-center">
+          <SizeChartTrigger />
+        </FadeIn>
 
         <FadeIn
           delay={0.15}

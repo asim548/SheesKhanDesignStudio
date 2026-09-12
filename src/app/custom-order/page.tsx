@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import SectionHeading from "@/components/ui/SectionHeading";
 import ConsultationForm from "@/components/forms/ConsultationForm";
+import SizeChartTrigger from "@/components/shop/SizeChartTrigger";
+import FadeIn from "@/components/ui/FadeIn";
 
 export const metadata: Metadata = {
   title: "Custom Order",
@@ -17,8 +19,11 @@ export default function CustomOrderPage() {
           label="Bespoke"
           title="Custom Order Consultation"
           subtitle="This is not an instant purchase. Share your preferences and our atelier will reach out personally."
-          className="mb-16"
+          className="mb-10"
         />
+        <FadeIn delay={0.1} className="mb-12 flex justify-center">
+          <SizeChartTrigger />
+        </FadeIn>
         <Suspense
           fallback={
             <div className="mx-auto max-w-xl py-20 text-center font-sans text-sm text-espresso/50">

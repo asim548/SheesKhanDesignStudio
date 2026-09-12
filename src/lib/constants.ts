@@ -66,7 +66,7 @@ export const PRODUCT_SUBCATEGORIES = [
 
 /** Extra subcategories for Luxe Pret only */
 export const LUXE_PRET_EXTRA_SUBCATEGORIES = [
-  { value: "light-lux", label: "Light Lux" },
+  { value: "light-lux", label: "Light Luxe" },
 ] as const;
 
 export const PARENT_CATEGORIES_WITH_SUBCATEGORIES = [

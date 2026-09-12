@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import Logo from "@/components/ui/Logo";
 import {
   SIZE_CHART_NOTE,
   SIZE_CHART_SIZES,
@@ -40,10 +41,7 @@ export default function SizeChartModal({ open, onClose }: Props) {
           aria-modal="true"
           aria-label="Women's size guide"
         >
-          <div className="flex shrink-0 items-center justify-between border-b border-espresso/10 px-4 py-3 md:px-8">
-            <p className="font-serif text-lg font-light tracking-wide text-espresso md:text-xl">
-              Women&apos;s Size Guide
-            </p>
+          <div className="flex shrink-0 justify-end border-b border-espresso/10 px-4 py-3 md:px-8">
             <button
               type="button"
               onClick={onClose}
@@ -56,6 +54,12 @@ export default function SizeChartModal({ open, onClose }: Props) {
 
           <div className="flex-1 overflow-y-auto px-4 py-8 md:px-8 md:py-10">
             <div className="mx-auto max-w-3xl space-y-10">
+              <div className="flex flex-col items-center pb-2 text-center">
+                <Logo href={false} animated={false} size="sm" />
+                <h1 className="mt-6 font-serif text-xl font-light tracking-wide text-espresso md:text-2xl">
+                  Women&apos;s Size Guide
+                </h1>
+              </div>
               {SIZE_CHART_TABLES.map((table) => (
                 <section key={table.title}>
                   <h2 className="mb-4 text-center font-serif text-xl font-light tracking-wide text-espresso md:text-2xl">

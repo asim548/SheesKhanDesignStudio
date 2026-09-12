@@ -8,6 +8,8 @@ import { z } from "zod";
 import { motion, AnimatePresence } from "framer-motion";
 import Button from "@/components/ui/Button";
 import FadeIn from "@/components/ui/FadeIn";
+import SizeChartTrigger from "@/components/shop/SizeChartTrigger";
+import { PRODUCT_SIZES } from "@/lib/constants";
 
 const schema = z.object({
   designReference: z.string().optional(),
@@ -21,6 +23,7 @@ const schema = z.object({
   shirtLength: z.string().optional(),
   trouserLength: z.string().optional(),
   measurementNotes: z.string().optional(),
+  preferredSize: z.string().optional(),
   specialRequests: z.string().optional(),
   clientName: z.string().min(2, "Name is required"),
   email: z.string().email("Valid email required"),
@@ -41,6 +44,7 @@ const STEPS = [
 export default function ConsultationForm() {
   const searchParams = useSearchParams();
   const prefillDesign = searchParams.get("design") || "";
+  const prefillSize = searchParams.get("size") || "";
   const [step, setStep] = useState(1);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -53,7 +57,10 @@ export default function ConsultationForm() {
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
-    defaultValues: { designReference: prefillDesign },
+    defaultValues: {
+      designReference: prefillDesign,
+      preferredSize: prefillSize || "M",
+    },
   });
 
   const next = async () => {
@@ -85,6 +92,7 @@ export default function ConsultationForm() {
           specialRequests: data.specialRequests,
           message: data.message,
           measurements: {
+            size: data.preferredSize,
             bust: data.bust,
             waist: data.waist,
             hips: data.hips,
@@ -216,16 +224,31 @@ export default function ConsultationForm() {
                 <legend className="heading-display mb-2 text-2xl">
                   Measurements
                 </legend>
-                <p className="mb-2 font-sans text-base text-espresso/60">
+                <p className="mb-6 font-sans text-base text-espresso/60">
                   Optional for now — we&apos;ll refine during consultation.
                 </p>
-                <a
-                  href="/measurement-guide"
-                  className="mb-8 inline-block font-sans text-xs uppercase tracking-luxury text-espresso underline underline-offset-4"
-                >
-                  View Measurement Guide
-                </a>
-                <div className="mt-6 grid gap-5 sm:grid-cols-2">
+                <div className="mb-8">
+                  <div className="mb-3 flex items-center justify-between">
+                    <p className="label-luxury">Preferred Size</p>
+                    <SizeChartTrigger />
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {PRODUCT_SIZES.map((label) => (
+                      <label key={label} className="cursor-pointer">
+                        <input
+                          type="radio"
+                          value={label}
+                          {...register("preferredSize")}
+                          className="peer sr-only"
+                        />
+                        <span className="inline-flex min-w-[2.75rem] border border-espresso/20 px-3 py-2 font-sans text-[11px] uppercase tracking-[0.14em] text-espresso transition-all duration-500 hover:border-espresso/50 peer-checked:bg-espresso peer-checked:text-ivory">
+                          {label}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div className="grid gap-5 sm:grid-cols-2">
                   {(
                     [
                       ["bust", "Bust"],

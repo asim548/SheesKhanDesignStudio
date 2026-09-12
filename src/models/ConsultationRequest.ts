@@ -1,6 +1,7 @@
 import { Schema, models, model } from "mongoose";
 
 export interface IMeasurements {
+  size?: string;
   bust?: string;
   waist?: string;
   hips?: string;
@@ -39,6 +40,7 @@ const ConsultationSchema = new Schema<IConsultationRequest>(
     fabricPreference: String,
     colorPreference: String,
     measurements: {
+      size: String,
       bust: String,
       waist: String,
       hips: String,
