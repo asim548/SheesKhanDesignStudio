@@ -58,23 +58,22 @@ export default function ShopCategoryHeroes({ productsByCategory }: Props) {
             <FadeIn key={block.value} delay={i * 0.08}>
               <article className="group relative">
                 <Link href={block.href} className="block">
-                  <div className="relative aspect-[4/5] overflow-hidden md:aspect-[16/10] lg:aspect-[2/1] lg:max-h-[780px]">
+                  <div className="relative aspect-[3/4] overflow-hidden sm:aspect-[4/5] md:aspect-[16/9] lg:h-[78vh] lg:max-h-[860px] lg:aspect-auto">
                     <Image
                       src={cover}
                       alt={alt}
                       fill
-                      className="object-cover object-[center_22%] transition-transform duration-[1.6s] ease-luxury group-hover:scale-[1.03] md:object-[center_28%]"
+                      className="object-cover object-top transition-transform duration-[1.6s] ease-luxury group-hover:scale-[1.03]"
                       sizes="100vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-espresso/55 via-espresso/10 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-6 pb-10 pt-16 text-center md:pb-14">
-                      <h3 className="font-serif text-3xl font-light uppercase tracking-[0.22em] text-ivory md:text-5xl">
-                        {block.label}
-                      </h3>
-                      <span className="shop-now-pill mt-6 border-ivory/80 text-ivory group-hover:bg-ivory group-hover:text-espresso">
-                        Shop Now
-                      </span>
-                    </div>
+                  </div>
+                  <div className="flex flex-col items-center bg-ivory px-6 py-8 text-center md:py-10">
+                    <h3 className="font-serif text-2xl font-light uppercase tracking-[0.28em] text-espresso md:text-3xl lg:text-4xl">
+                      {block.label}
+                    </h3>
+                    <span className="shop-now-pill mt-5 group-hover:border-espresso group-hover:bg-espresso group-hover:text-ivory">
+                      Shop Now
+                    </span>
                   </div>
                 </Link>
               </article>
